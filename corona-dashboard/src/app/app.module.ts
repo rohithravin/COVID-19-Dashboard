@@ -6,6 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CaliDashboardComponent } from './cali-dashboard/cali-dashboard.component';
 import { WorldDashboardComponent } from './world-dashboard/world-dashboard.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { WorldDashboardComponent } from './world-dashboard/world-dashboard.compo
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    NoopAnimationsModule
+    NoopAnimationsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
