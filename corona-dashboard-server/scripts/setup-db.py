@@ -2,7 +2,6 @@ import mysql.connector
 from dotenv import load_dotenv
 import os
 from mysql.connector import errorcode
-import csv
 import pandas as pd
 
 # Load environment variables from `.env` file.
@@ -23,6 +22,61 @@ TABLES['zipcode'] = (
     "  `state` VARCHAR(5) NOT NULL,"
     "  `county` VARCHAR(250) NOT NULL"
     ") ENGINE=InnoDB")
+
+TABLES['cali_testing'] = (
+    "CREATE TABLE `cali_testing` ("
+    "  `date` VARCHAR(100) NOT NULL,"
+    "  `tested` INT NOT NULL,"
+    "  PRIMARY KEY (`date`)"
+    ") ENGINE=InnoDB"
+    )
+
+TABLES['cali_cases'] = (
+    "CREATE TABLE `cali_cases` ("
+    "  `county` VARCHAR(250) NOT NULL,"
+    "  `totalcountconfirmed` INT NOT NULL,"
+    "  `totalcountdeaths` INT NOT NULL,"
+    "  `newcountconfirmed` INT NOT NULL,"
+    "  `newcountdeaths` INT NOT NULL,"
+    "  `date` VARCHAR(100) NOT NULL"
+    ") ENGINE=InnoDB"
+    )
+
+TABLES['cali_cases_race'] = (
+    "CREATE TABLE `cali_cases_race` ("
+    "  `race_ethnicity` VARCHAR(100) NOT NULL,"
+    "  `cases` INT NOT NULL,"
+    "  `case_percentage` DECIMAL(10, 2) NOT NULL,"
+    "  `deaths` INT NOT NULL,"
+    "  `death_percentage` DECIMAL(10, 2) NOT NULL,"
+    "  `percent_ca_population` DECIMAL(10, 2) NOT NULL,"
+    "  `date` VARCHAR(100) NOT NULL"
+    ") ENGINE=InnoDB"
+    )
+
+TABLES['cali_cases_sex'] = (
+    "CREATE TABLE `cali_cases_sex` ("
+    "  `sex` VARCHAR(100) NOT NULL,"
+    "  `totalpositive2` INT NOT NULL,"
+    "  `date` VARCHAR(100) NOT NULL,"
+    "  `case_percent` DECIMAL(10, 2) NOT NULL,"
+    "  `deaths` INT NOT NULL,"
+    "  `deaths_percent` DECIMAL(10, 2) NOT NULL,"
+    "  `ca_percent` DECIMAL(10, 2) NOT NULL"
+    ") ENGINE=InnoDB"
+    )
+
+TABLES['cali_cases_age'] = (
+    "CREATE TABLE `cali_cases_age` ("
+    "  `age_group` VARCHAR(100) NOT NULL,"
+    "  `totalpositive` INT NOT NULL,"
+    "  `date` VARCHAR(100) NOT NULL,"
+    "  `case_percent` DECIMAL(10, 2) NOT NULL,"
+    "  `deaths` INT NOT NULL,"
+    "  `deaths_percent` DECIMAL(10, 2) NOT NULL,"
+    "  `ca_percent` DECIMAL(10, 2) NOT NULL"
+    ") ENGINE=InnoDB"
+    )
 
 
 
@@ -53,13 +107,12 @@ for table_name in TABLES:
         cursor.execute(table_description)
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-            sql_stm = "TRUNCATE TABLE {}".format(table_name)
+            sql_stm = "DROP TABLE {}".format(table_name)
             cursor.execute(sql_stm)
-            print("already exists.")
+            cursor.execute(table_description)
         else:
             print(err.msg)
-    else:
-        print("OK")
+    print("OK")
 
 zipcode_df = pd.read_csv('../data/zipcode.csv') 
 zipcode_df = zipcode_df.loc[zipcode_df['state'] == 'CA'][['zip','primary_city','state','county']]

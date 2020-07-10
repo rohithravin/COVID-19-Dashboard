@@ -18,6 +18,36 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to COVID-19 Dashboard Server." });
 });
 
+runLoadDataScript();
+
+
+function runLoadDataScript(){
+  const subprocess =  spawn('python', ["-u", './scripts/load-data.py']);
+  
+  // print output of script
+  subprocess.stdout.on('data', (data) => {
+    console.log(`data:${data}`);
+  });
+  subprocess.stderr.on('data', (data) => {
+    console.log(`error:${data}`);
+  });
+  subprocess.on('close', () => {
+    console.log("Closed");
+
+});
+
+}
+
+
+
+setInterval(function() {
+  runLoadDataScript();
+}, 1440 * 60 * 1000);
+
+
+
+
+
 // set port, listen for requests
 app.listen(3000, () => {
   console.log("Server is running on port 3000.");
