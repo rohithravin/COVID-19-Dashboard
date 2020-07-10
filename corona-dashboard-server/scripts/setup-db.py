@@ -1,16 +1,12 @@
 import mysql.connector
-from dotenv import load_dotenv
 import os
 from mysql.connector import errorcode
 import pandas as pd
+import config
 
-# Load environment variables from `.env` file.
-load_dotenv('../.env')
-
-cnx = mysql.connector.connect(user = os.environ.get("MYSQL_USERNAME"),
-                                password = os.environ.get("MYSQL_PASSWORD"),
-                                host = os.environ.get("MYSQL_HOST"),
-                                allow_local_infile=True)
+cnx = mysql.connector.connect(user = config.MYSQL_USERNAME, password = config.MYSQL_PASSWORD,
+                                host = config.MYSQL_HOST, allow_local_infile=True,
+                                database = config.MYSQL_DB )
 cursor = cnx.cursor()
 
 TABLES = {}
@@ -83,18 +79,20 @@ TABLES['cali_cases_age'] = (
 def create_database(cursor):
     try:
         cursor.execute(
-            "CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(os.environ.get("MYSQL_DB")))
+            "CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(config.MYSQL_DB))
     except mysql.connector.Error as err:
         print("Failed creating database: {}".format(err))
         exit(1)
+    
 
 try:
-    cursor.execute("USE {}".format(os.environ.get("MYSQL_DB")))
+    print('Databse: {}'.format(config.MYSQL_DB))
+    cursor.execute("USE {}".format(config.MYSQL_DB))
 except mysql.connector.Error as err:
-    print("Database {} does not exists.".format(os.environ.get("MYSQL_DB")))
+    print("Database {} does not exists.".format(config.MYSQL_DB))
     if err.errno == errorcode.ER_BAD_DB_ERROR:
         create_database(cursor)
-        print("Database {} created successfully.".format(os.environ.get("MYSQL_DB")))
+        print("Database {} created successfully.".format(config.MYSQL_DB))
         cnx.database = os.environ.get("MYSQL_DB")
     else:
         print(err)
@@ -116,10 +114,11 @@ for table_name in TABLES:
 
 zipcode_df = pd.read_csv('../data/zipcode.csv') 
 zipcode_df = zipcode_df.loc[zipcode_df['state'] == 'CA'][['zip','primary_city','state','county']]
+zipcode_df['county'] = zipcode_df['county'].str[0:-6]
 zipcode_data = [tuple(x) for x in zipcode_df.values.tolist()]
 
 # print(zipcode_data[0:5])
-print("Loading zipcode data:", end="")
+print("Loading zipcode data: ", end="")
 try:
     cursor.executemany(
     """ 

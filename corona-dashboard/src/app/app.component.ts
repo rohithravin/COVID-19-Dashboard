@@ -27,17 +27,28 @@ export class AppComponent {
   }
 
   getUserLocation(){
-    var err = this._apiService.testAPIService(this.zipcode);
+    var err = this._apiService.getUserLocation(this.zipcode);
     err.subscribe( data => { 
-      console.log(data);
+      if (data['sucess'] == 501){
+        this._snackBar.open(data['msg'], 'Close', {
+          panelClass: 'snack-bar',
+          duration: 2500
+        });
+        this.accessTabsFlag = false;
+        this.landingPageFlag = true;
+      }
+      else{
+        this.accessTabsFlag = true;
+        this.landingPageFlag = false;
+        this.caliDashboardFlag = true;
+        console.log(data['data']);
+      }
+      
     });
   }
   
   onZipcodeClick(){
     if (this.zipcode != undefined && this.zipcode.toString().length == 5 ){
-      this.accessTabsFlag = true;
-      this.landingPageFlag = false;
-      this.caliDashboardFlag = true;
       this.getUserLocation();
     }
     else{
