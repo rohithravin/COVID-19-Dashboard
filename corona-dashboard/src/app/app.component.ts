@@ -15,6 +15,9 @@ export class AppComponent {
   caliDashboardFlag: boolean;
   worldDashboardFlag: boolean;
   landingPageFlag: boolean;
+
+  caliButtonSelected: string;
+  worldButtonSelected: string;
   
   constructor(private _apiService: CoronaDashboardApiService, private _snackBar: MatSnackBar) {
     this.accessTabsFlag = false;
@@ -22,6 +25,9 @@ export class AppComponent {
     this.caliDashboardFlag = false;
     this.worldDashboardFlag = false;
     this.landingPageFlag = true;
+
+    this.caliButtonSelected = 'btn-primary';
+    this.worldButtonSelected = 'btn-primary';
 
     
   }
@@ -41,10 +47,30 @@ export class AppComponent {
         this.accessTabsFlag = true;
         this.landingPageFlag = false;
         this.caliDashboardFlag = true;
+        this.caliButtonSelected = 'btn-outline-primary';
+        this.worldButtonSelected = 'btn-primary';
         console.log(data['data']);
       }
       
     });
+  }
+
+  onCaliButtonClick(){
+    if (this.caliDashboardFlag != true){
+      this.caliButtonSelected = 'btn-outline-primary';
+      this.worldButtonSelected = 'btn-primary';
+      this.caliDashboardFlag = true;
+      this.worldDashboardFlag = false;
+    }
+  }
+
+  onWorldButtonClick(){
+    if (this.worldDashboardFlag != true){
+      this.caliDashboardFlag = false;
+      this.worldDashboardFlag = true;
+      this.caliButtonSelected = 'btn-primary';
+      this.worldButtonSelected = 'btn-outline-primary';
+    }
   }
   
   onZipcodeClick(){
