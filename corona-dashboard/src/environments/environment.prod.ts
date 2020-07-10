@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: false,
+  NODE_HOST: 'http://localhost:3000'
 };

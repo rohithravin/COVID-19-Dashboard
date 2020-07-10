@@ -1,18 +1,12 @@
 import mysql.connector
-from dotenv import load_dotenv
 import os
 from mysql.connector import errorcode
 import pandas as pd
+import config
 
-# Load environment variables from `.env` file.
-load_dotenv('./.env')
-
-cnx = mysql.connector.connect(user = os.environ.get("MYSQL_USERNAME"),
-                                password = os.environ.get("MYSQL_PASSWORD"),
-                                host = os.environ.get("MYSQL_HOST"),
-                                allow_local_infile=True,
-                                database=os.environ.get("MYSQL_DB")
-                                )
+cnx = mysql.connector.connect(user = config.MYSQL_USERNAME, password = config.MYSQL_PASSWORD,
+                                host = config.MYSQL_HOST, allow_local_infile=True,
+                                database = config.MYSQL_DB )
 cursor = cnx.cursor()
 
 DATA_URLS = {
