@@ -17,14 +17,14 @@ export class CoronaDashboardApiService {
     })
   };
 
-  testAPIService(payload){
-    console.log(payload);
-    return this._httpClient.post( 'fsdfafa', payload).pipe( catchError(this.handleError));;
-  }
-
   getUserLocation(zipcode){
     const payload  = JSON.stringify(zipcode);
-    return this._httpClient.post('http://localhost:3000/getUserLocation', { zipcode: payload }, this.httpOptions);
+    return this._httpClient.post('http://localhost:3000/getUserLocation', { zipcode: payload }, this.httpOptions).pipe( catchError(this.handleError));
+  }
+
+  getCaliDailyData(county){
+    const payload  = JSON.stringify(county);
+    return this._httpClient.post('http://localhost:3000/cali/getDailyData', { county: payload }, this.httpOptions).pipe( catchError(this.handleError));
   }
 
   handleError(error: HttpErrorResponse){

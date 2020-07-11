@@ -12,9 +12,14 @@
                                 <div class="row align-items-center no-gutters">
                                     <div class="col mr-2">
                                         <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>Daily cases (State)</span></div>
-                                        <div class="text-dark font-weight-bold h5 mb-0"><span>$40,000</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{this.dailyData['daily_case_state']['newCaseCount']}}</span></div>
                                     </div>
-                                    <div class="col-auto" style="height: 8px;"><fa-icon [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon><span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">50%</span></div>
+                                    <div class="col-auto" style="height: 8px;">
+
+                                        <fa-icon *ngIf="this.dailyData['daily_case_state']['direction'] == 'decrease' " [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon>
+                                        <fa-icon *ngIf="this.dailyData['daily_case_state']['direction'] == 'increase' " [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon>
+                                        
+                                        <span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">{{this.dailyData['daily_case_state']['newCaseCount_percentage']}}%</span></div>
                                 </div>
                             </div>
                         </div>
@@ -24,10 +29,15 @@
                             <div class="card-body">
                                 <div class="row align-items-center no-gutters">
                                     <div class="col mr-2">
-                                        <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>DAILY CASES (COUNTY)</span></div>
-                                        <div class="text-dark font-weight-bold h5 mb-0"><span>$215,000</span></div>
+                                        <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>DAILY CASES ({{this.userLocationData['county']}})</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{this.dailyData['daily_case_county']['newCaseCount']}}</span></div>
                                     </div>
-                                    <div class="col-auto" style="height: 8px;"><fa-icon [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon><span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">50%</span></div>
+                                    <div class="col-auto" style="height: 8px;">
+                                        
+                                        <fa-icon *ngIf="this.dailyData['daily_case_county']['direction'] == 'decrease' " [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon>
+                                        <fa-icon *ngIf="this.dailyData['daily_case_county']['direction'] == 'increase' " [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon>
+                                        
+                                        <span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">{{this.dailyData['daily_case_county']['newCaseCount_percentage']}}%</span></div>
                                 </div>
                             </div>
                         </div>
@@ -40,11 +50,17 @@
                                         <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>DAILY Deaths (STATE)</span></div>
                                         <div class="row no-gutters align-items-center">
                                             <div class="col-auto">
-                                                <div class="text-dark font-weight-bold h5 mb-0 mr-3"><span>50%</span></div>
+                                                <div class="text-dark font-weight-bold h5 mb-0 mr-3"><span>{{this.dailyData['daily_death_state']['newCaseCount']}}</span></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-auto" style="height: 8px;"><fa-icon [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon><span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">50%</span></div>
+                                    <div class="col-auto" style="height: 8px;">
+                                        
+                                        <fa-icon *ngIf="this.dailyData['daily_death_state']['direction'] == 'decrease' " [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon>
+                                        <fa-icon *ngIf="this.dailyData['daily_death_state']['direction'] == 'increase' " [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon>
+                
+                                        
+                                        <span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">{{this.dailyData['daily_death_state']['newCaseCount_percentage']}}%</span></div>
                                 </div>
                             </div>
                         </div>
@@ -55,9 +71,15 @@
                                 <div class="row align-items-center no-gutters">
                                     <div class="col mr-2">
                                         <div class="text-uppercase text-warning font-weight-bold text-xs mb-1"><span>DAILY TESTING</span></div>
-                                        <div class="text-dark font-weight-bold h5 mb-0"><span>18</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{this.dailyData['daily_test_state']['daily_tested']}}</span></div>
                                     </div>
-                                    <div class="col-auto" style="height: 8px;"><fa-icon [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon><span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">50%</span></div>
+                                    <div class="col-auto" style="height: 8px;">
+                                        
+                                        <fa-icon *ngIf="this.dailyData['daily_test_state']['direction'] == 'decrease' " [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon>
+                                        <fa-icon *ngIf="this.dailyData['daily_test_state']['direction'] == 'increase' " [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon>
+                
+                                        
+                                        <span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">{{this.dailyData['daily_test_state']['daily_test_percentage']}}%</span></div>
                                 </div>
                             </div>
                         </div>

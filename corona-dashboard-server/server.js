@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const {spawn} = require('child_process');
 const userLocationRouter = require('./routes/user-location-route')
-
+const caliDashboard = require('./routes/cali-dashboard-route')
 const app = express();
 
 // parse requests of content-type: application/json
@@ -17,6 +17,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(userLocationRouter);
+app.use('/cali',caliDashboard);
 
 // simple route
 app.get("/", (req, res) => {
