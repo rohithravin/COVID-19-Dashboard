@@ -5,12 +5,12 @@
               <div class="container-fluid">
                   <h1 style="margin-top: 5px; color:#858796;">COVID-19 DASHBOARD</h1><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                   <ul class="nav navbar-nav flex-nowrap ml-auto" *ngIf="this.accessTabsFlag">
-                      <li class="nav-item dropdown no-arrow mx-1" role="presentation"><button class="btn {{this.caliButtonSelected}}" type="button" (click)="onCaliButtonClick()" >California</button></li>
+                      <li class="nav-item dropdown no-arrow mx-1" role="presentation"><button class="btn {{this.caliButtonSelected}}" type="button" (click)="this.onCaliButtonClick()" >California</button></li>
                       <li class="nav-item dropdown no-arrow mx-1" role="presentation">
                           <div class="shadow dropdown-list dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown"></div>
                       </li>
                       <div class="d-none d-sm-block topbar-divider"></div>
-                      <li class="nav-item dropdown no-arrow" role="presentation"><button class="btn {{this.worldButtonSelected}}" type="button" (click)="onWorldButtonClick()">World</button></li>
+                      <li class="nav-item dropdown no-arrow" role="presentation"><button class="btn {{this.worldButtonSelected}}" type="button" (click)="this.onWorldButtonClick()">World</button></li>
                   </ul>
               </div>
           </nav>
@@ -25,7 +25,7 @@
                 <h4 class="card-title" style="text-align: center; color:#858796;">Which part of California are you from?</h4>
                 <div class="row">
                     <div class="col offset-lg-2" style="display: flex; justify-content: center;"><input type="number" placeholder="Zipcode" style="margin-top: 5px;" [(ngModel)]="zipcode" required></div>
-                    <div class="col" style="display: flex; justify-content: left;"><button class="btn btn-primary text-center" type="button" style="margin-left: 0px;" (click)="onZipcodeClick()">Enter</button></div>
+                    <div class="col" style="display: flex; justify-content: left;"><button class="btn btn-primary text-center" type="button" style="margin-left: 0px;" (click)="this.onZipcodeClick()">Enter</button></div>
                 </div>
             </div>
         </div>

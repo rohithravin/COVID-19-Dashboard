@@ -23,8 +23,14 @@ export class CoronaDashboardApiService {
   }
 
   getCaliDailyData(county){
+    console.log(county)
     const payload  = JSON.stringify(county);
     return this._httpClient.post('http://localhost:3000/cali/getDailyData', { county: payload }, this.httpOptions).pipe( catchError(this.handleError));
+  }
+
+  getPlotNewKind(data){
+    const payload  = JSON.stringify(data);
+    return this._httpClient.post('http://localhost:3000/cali/getPlotNewKind', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
   }
 
   handleError(error: HttpErrorResponse){
