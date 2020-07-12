@@ -21,7 +21,7 @@ TABLES['zipcode'] = (
 
 TABLES['cali_testing'] = (
     "CREATE TABLE `cali_testing` ("
-    "  `date` VARCHAR(100) NOT NULL,"
+    "  `date` DATE NOT NULL,"
     "  `tested` INT NOT NULL,"
     "  PRIMARY KEY (`date`)"
     ") ENGINE=InnoDB"
@@ -34,7 +34,7 @@ TABLES['cali_cases'] = (
     "  `totalcountdeaths` INT NOT NULL,"
     "  `newcountconfirmed` INT NOT NULL,"
     "  `newcountdeaths` INT NOT NULL,"
-    "  `date` VARCHAR(100) NOT NULL"
+    "  `date` DATE NOT NULL"
     ") ENGINE=InnoDB"
     )
 
@@ -46,7 +46,7 @@ TABLES['cali_cases_race'] = (
     "  `deaths` INT NOT NULL,"
     "  `death_percentage` DECIMAL(10, 2) NOT NULL,"
     "  `percent_ca_population` DECIMAL(10, 2) NOT NULL,"
-    "  `date` VARCHAR(100) NOT NULL"
+    "  `date` DATE NOT NULL"
     ") ENGINE=InnoDB"
     )
 
@@ -54,7 +54,7 @@ TABLES['cali_cases_sex'] = (
     "CREATE TABLE `cali_cases_sex` ("
     "  `sex` VARCHAR(100) NOT NULL,"
     "  `totalpositive2` INT NOT NULL,"
-    "  `date` VARCHAR(100) NOT NULL,"
+    "  `date` DATE NOT NULL,"
     "  `case_percent` DECIMAL(10, 2) NOT NULL,"
     "  `deaths` INT NOT NULL,"
     "  `deaths_percent` DECIMAL(10, 2) NOT NULL,"
@@ -66,7 +66,7 @@ TABLES['cali_cases_age'] = (
     "CREATE TABLE `cali_cases_age` ("
     "  `age_group` VARCHAR(100) NOT NULL,"
     "  `totalpositive` INT NOT NULL,"
-    "  `date` VARCHAR(100) NOT NULL,"
+    "  `date` DATE NOT NULL,"
     "  `case_percent` DECIMAL(10, 2) NOT NULL,"
     "  `deaths` INT NOT NULL,"
     "  `deaths_percent` DECIMAL(10, 2) NOT NULL,"
@@ -114,7 +114,7 @@ for table_name in TABLES:
 
 zipcode_df = pd.read_csv('../data/zipcode.csv') 
 zipcode_df = zipcode_df.loc[zipcode_df['state'] == 'CA'][['zip','primary_city','state','county']]
-zipcode_df['county'] = zipcode_df['county'].str[0:-6]
+zipcode_df['county'] = zipcode_df['county'].str[0:-7]
 zipcode_data = [tuple(x) for x in zipcode_df.values.tolist()]
 
 # print(zipcode_data[0:5])

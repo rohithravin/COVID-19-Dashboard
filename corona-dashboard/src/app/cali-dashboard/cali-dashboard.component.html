@@ -1,1 +1,150 @@
-<p>cali-dashboard works!</p>
+<div id="wrapper">
+    <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+            <div class="container-fluid">
+                <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-dark mb-0">California Dashboard</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow  py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>Daily cases (State)</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{this.dailyData['daily_case_state']['newCaseCount']}}</span></div>
+                                    </div>
+                                    <div class="col-auto" style="height: 8px;">
+
+                                        <fa-icon *ngIf="this.dailyData['daily_case_state']['direction'] == 'decrease' " [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon>
+                                        <fa-icon *ngIf="this.dailyData['daily_case_state']['direction'] == 'increase' " [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon>
+                                        
+                                        <span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">{{this.dailyData['daily_case_state']['newCaseCount_percentage']}}%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow  py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-success font-weight-bold text-xs mb-1"><span>DAILY CASES ({{this.userLocationData['county']}})</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{this.dailyData['daily_case_county']['newCaseCount']}}</span></div>
+                                    </div>
+                                    <div class="col-auto" style="height: 8px;">
+                                        
+                                        <fa-icon *ngIf="this.dailyData['daily_case_county']['direction'] == 'decrease' " [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon>
+                                        <fa-icon *ngIf="this.dailyData['daily_case_county']['direction'] == 'increase' " [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon>
+                                        
+                                        <span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">{{this.dailyData['daily_case_county']['newCaseCount_percentage']}}%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-info font-weight-bold text-xs mb-1"><span>DAILY Deaths (STATE)</span></div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                <div class="text-dark font-weight-bold h5 mb-0 mr-3"><span>{{this.dailyData['daily_death_state']['newCaseCount']}}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto" style="height: 8px;">
+                                        
+                                        <fa-icon *ngIf="this.dailyData['daily_death_state']['direction'] == 'decrease' " [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon>
+                                        <fa-icon *ngIf="this.dailyData['daily_death_state']['direction'] == 'increase' " [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon>
+                
+                                        
+                                        <span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">{{this.dailyData['daily_death_state']['newCaseCount_percentage']}}%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-3 mb-4">
+                        <div class="card shadow py-2">
+                            <div class="card-body">
+                                <div class="row align-items-center no-gutters">
+                                    <div class="col mr-2">
+                                        <div class="text-uppercase text-warning font-weight-bold text-xs mb-1"><span>DAILY TESTING</span></div>
+                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{this.dailyData['daily_test_state']['daily_tested']}}</span></div>
+                                    </div>
+                                    <div class="col-auto" style="height: 8px;">
+                                        
+                                        <fa-icon *ngIf="this.dailyData['daily_test_state']['direction'] == 'decrease' " [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon>
+                                        <fa-icon *ngIf="this.dailyData['daily_test_state']['direction'] == 'increase' " [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon>
+                
+                                        
+                                        <span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">{{this.dailyData['daily_test_state']['daily_test_percentage']}}%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7 col-xl-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <select  [(ngModel)]="this.plotNewKindSelected" (change)="this.updateNewKindPlot(this.plotNewKindSelected,this.plotNewTraceSelected,this.plotNewTimeline)"  style="font-size:15px; background: #f8f9fc; border:0px; outline:0px;">
+                                    <option *ngFor="let kind of this.plotNewKind" [ngValue]="kind"> {{kind.name}} </option>
+                                  </select>
+                                  <select  [(ngModel)]="this.plotNewTraceSelected" (change)="this.updateNewKindPlot(this.plotNewKindSelected,this.plotNewTraceSelected,this.plotNewTimeline)" style=" font-size:15px; color:#fdfefe; background: #717384; border:0px; border-radius:5px; padding:5px; outline:0px;">
+                                    <option *ngFor="let trace of this.plotNewTrace" [ngValue]="trace"> {{trace.name}} </option>
+                                  </select>
+                            </div>
+                            <div   class="card-body">
+
+                                <div *ngIf="this.showPlotNew == false" class="row" style="height: 525px;">
+                                    <div class="col text-center align-self-center">
+                                        <h1>Loading Visuals...</h1>
+                                    </div>
+                                </div>
+
+                                <iframe *ngIf="this.showPlotNew == true" id="igraph" scrolling="no" style="border:none;" seamless="seamless" [src]="this.plotNewLink" height="525" width="100%"></iframe>
+                                
+                                <div *ngIf="this.showPlotNew == true" class="row" style="margin-top: 10px;">
+                                    <div class="col text-center" *ngFor="let button of this.plotNewTimeline"> 
+                                        <div class="col text-center">
+                                            <button  [ngClass]="button.selected ? 'btn btn-light text-info border rounded border-white' : 'btn text-muted border rounded border-white' " type="button" (click)="updateButtonSelected(button.id, this.plotNewTimeline,this.plotNewKindSelected,this.plotNewTraceSelected)" >{{button.name}}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-xl-4">
+                        <div class="card shadow mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <select name="cars" id="cars" style=" font-size:15px; background: #f8f9fc; border:0px; outline:0px;">
+                                    <option value="volvo">Volvo</option>
+                                    <option value="saab">Saab</option>
+                                    <option value="mercedes">Mercedes</option>
+                                    <option value="audi">Audi</option>
+                                  </select>
+                                  <select name="cars" id="cars" style=" font-size:15px; color:#fdfefe; background: #717384; border:0px; border-radius:5px; padding:5px; outline:0px;">
+                                    <option value="volvo" style="background-color:red;">asdfafasdfasfafa</option>
+                                    <option value="saab" style="background-color:red;">Saab</option>
+                                    <option value="mercedes" style="background-color:red;">Mercedes</option>
+                                    <option value="audi" style="background-color:red;">Audi</option>
+                                  </select>
+                            </div>
+                            <div class="card-body">
+                                <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~rohithravin1/12.embed?showlink=false&modebar=false" height="250" width="100%"></iframe>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

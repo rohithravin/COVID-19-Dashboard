@@ -9,16 +9,8 @@ cnx = mysql.connector.connect(user = config.MYSQL_USERNAME, password = config.MY
                                 database = config.MYSQL_DB )
 cursor = cnx.cursor()
 
-DATA_URLS = {
-                'cali_cases_age' : "https://data.ca.gov/dataset/590188d5-8545-4c93-a9a0-e230f0db7290/resource/339d1c4d-77ab-44a2-9b40-745e64e335f2/download/case_demographics_age.csv",
-                'cali_cases_sex' : "https://data.ca.gov/dataset/590188d5-8545-4c93-a9a0-e230f0db7290/resource/ee01b266-0a04-4494-973e-93497452e85f/download/case_demographics_sex.csv",
-                'cali_cases_race' : "https://data.ca.gov/dataset/590188d5-8545-4c93-a9a0-e230f0db7290/resource/7e477adb-d7ab-4d4b-a198-dc4c6dc634c9/download/case_demographics_ethnicity.csv",
-                'cali_cases' : "https://data.ca.gov/dataset/590188d5-8545-4c93-a9a0-e230f0db7290/resource/926fd08f-cc91-4828-af38-bd45de97f8c3/download/statewide_cases.csv",
-                'cali_testing' : "https://data.ca.gov/dataset/efd6b822-7312-477c-922b-bccb82025fbe/resource/b6648a0d-ff0a-4111-b80b-febda2ac9e09/download/statewide_testing.csv"
-            }
-
-for key in DATA_URLS.keys():
-    data = pd.read_csv(DATA_URLS[key]).dropna()
+for key in config.DATA_URLS.keys():
+    data = pd.read_csv(config.DATA_URLS[key]).dropna()
     mysql_data = [tuple(x) for x in data.values.tolist()]
 
     print("Clearing {} data: ".format(key), end="")

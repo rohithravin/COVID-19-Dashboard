@@ -33,10 +33,10 @@ err_flag = True
 
 for (zipcode, primary_city, state,county) in cursor:
     if county.strip() in config.NORCAL_COUNTIES:
-        print(json.dumps({'county':'NORCAL'}))
+        print(json.dumps({'county':county, 'zipcode':zipcode, 'caliSection':'NORCAL'}))
         err_flag = False
     else:
-        print(json.dumps({'county':'SOCAL'}))
+        print(json.dumps({'county':county, 'zipcode':zipcode, 'caliSection':'SOCAL'}))
         err_flag = False
 if err_flag:
     print('Zipcode doesn\'t exist.',file=sys.stderr)

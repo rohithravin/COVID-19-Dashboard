@@ -43,13 +43,21 @@ export class AppComponent {
         this.accessTabsFlag = false;
         this.landingPageFlag = true;
       }
-      else{
+      else if (data['sucess'] == 100){
         this.accessTabsFlag = true;
         this.landingPageFlag = false;
         this.caliDashboardFlag = true;
         this.caliButtonSelected = 'btn-outline-primary';
         this.worldButtonSelected = 'btn-primary';
-        console.log(data['data']);
+        localStorage.setItem('CaliDashboardUserLocationInfo', JSON.stringify(data['data']))
+      }
+      else {
+        this._snackBar.open( 'ERROR: Server not responding. Try again later.', 'Close', {
+          panelClass: 'snack-bar',
+          duration: 2500
+        });
+        this.accessTabsFlag = false;
+        this.landingPageFlag = true;
       }
       
     });
