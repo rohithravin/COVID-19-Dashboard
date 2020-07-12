@@ -100,7 +100,9 @@ export class CaliDashboardComponent implements OnInit {
           updatedPlotTimeline = plotTimeline[x]['id']
       }
     }
-
+    console.log(plotKind.id)
+    console.log(plotKindTrace.id)
+    console.log(updatedPlotTimeline)
     var err = this._apiService.getPlotNewKind({'plotKindId': plotKind.id, 'plotTraceId':plotKindTrace.id, 'plotTimeline':updatedPlotTimeline,county: this.userLocationData['county'] });
     err.subscribe( data => { 
       if (data['sucess'] == 501){
@@ -111,6 +113,7 @@ export class CaliDashboardComponent implements OnInit {
           this.showPlotNew = false;
       }
       else if (data['sucess'] == 100){
+        console.log(data['data']['Plot Link'])
         this.plotNewLink = this._sanitizer.bypassSecurityTrustResourceUrl(data['data']['Plot Link']);
         this.showPlotNew = true;
       }

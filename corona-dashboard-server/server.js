@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to COVID-19 Dashboard Server." });
 });
 
-//runLoadDataScript();
+runLoadDataScript();
 
 function runLoadDataScript(){
   console.log(`load-data.py [INFO]: Start.`);

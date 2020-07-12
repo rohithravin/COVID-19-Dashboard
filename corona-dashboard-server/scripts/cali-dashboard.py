@@ -139,12 +139,12 @@ def newKindPlot(kindId, traceId, timeline, county):
             xaxis_title="# of People",
             yaxis_title="Date",
         )
-    username = 'rohithravin1' # your username
-    api_key = 'aPwUI68OLfySnu9t2Y3S' # your api key - go to profile > settings > regenerate key
+    username = 'rohithravin' # your username
+    api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
     fig_url = py.plot(fig, filename = 'new_case_death_plot', auto_open=False)
     html = tls.get_embed(fig_url)
-    final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false'
+    final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
     print(json.dumps({'Plot Link': final_html_link}))
 
 
