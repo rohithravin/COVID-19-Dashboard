@@ -33,6 +33,11 @@ export class CoronaDashboardApiService {
     return this._httpClient.post('http://localhost:3000/cali/getPlotNewKind', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
   }
 
+  getPlotTotalKind(data){
+    const payload  = JSON.stringify(data);
+    return this._httpClient.post('http://localhost:3000/cali/getPlotTotalKind', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
+  }
+
   handleError(error: HttpErrorResponse){
     var temp = ['SERVE ERROR: Server not responding. Try again later.'];
     return temp;
