@@ -94,7 +94,7 @@
                                     <option *ngFor="let trace of this.plotNewTrace" [ngValue]="trace"> {{trace.name}} </option>
                                   </select>
                             </div>
-                            <div   class="card-body">
+                            <div  class="card-body">
 
                                 <div *ngIf="this.showPlotNew == false" class="row" style="height: 300px;">
                                     <div class="col text-center align-self-center">
@@ -132,22 +132,22 @@
                         <div class="row">
                             <div class="col">
                         <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                                <select name="cars" id="cars" style=" font-size:15px; background: #f8f9fc; border:0px; outline:0px;">
-                                    <option value="volvo">Volvo</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="mercedes">Mercedes</option>
-                                    <option value="audi">Audi</option>
-                                  </select>
-                                  <select name="cars" id="cars" style=" font-size:15px; color:#fdfefe; background: #717384; border:0px; border-radius:5px; padding:5px; outline:0px;">
-                                    <option value="volvo" style="background-color:red;">asdfafasdfasfafa</option>
-                                    <option value="saab" style="background-color:red;">Saab</option>
-                                    <option value="mercedes" style="background-color:red;">Mercedes</option>
-                                    <option value="audi" style="background-color:red;">Audi</option>
-                                  </select>
-                            </div>
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <select  [(ngModel)]="this.plotTotalKindSelected" (change)="this.updateTotalPlot(this.plotTotalKindSelected,this.plotTotalTraceSelected)"  style="font-size:15px; background: #f8f9fc; border:0px; outline:0px;">
+                                        <option *ngFor="let kind of this.plotTotalKind" [ngValue]="kind"> {{kind.name}} </option>
+                                      </select>
+                                      <select  [(ngModel)]="this.plotTotalTraceSelected" (change)="this.updateTotalPlot(this.plotTotalKindSelected,this.plotTotalTraceSelected)" style=" font-size:15px; color:#fdfefe; background: #717384; border:0px; border-radius:5px; padding:5px; outline:0px;">
+                                        <option *ngFor="let trace of this.plotTotalTrace" [ngValue]="trace"> {{trace.name}} </option>
+                                      </select>
+                                </div>
+                            
                             <div class="card-body">
-                                <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~rohithravin/29.embed?showlink=false&modebar=false" height="325" width="100%"></iframe>
+                                <div *ngIf="this.showPlotTotal == false" class="row" style="height: 325px;">
+                                    <div class="col text-center align-self-center">
+                                        <h1>Loading Visuals...</h1>
+                                    </div>
+                                </div>
+                                <iframe *ngIf="this.showPlotTotal == true" id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~rohithravin/29.embed?showlink=false&modebar=false" height="325" width="100%"></iframe>
 
                             </div>
                         </div>
