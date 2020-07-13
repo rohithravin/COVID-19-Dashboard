@@ -36,7 +36,10 @@ router.post('/getPlotNewKind', (req,res) => {
     subprocess.on('close', () => {
         console.log("cali-dashboard.py --updateNewPlot [INFO]: Closed.");
     });
-    
+})
+
+router.post('/getPlotTotalKind', (req,res) => {
+    res.send({sucess:100, msg: 'Success.', data:req.body});
 })
 
 module.exports = router;

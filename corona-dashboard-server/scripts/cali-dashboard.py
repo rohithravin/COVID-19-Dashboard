@@ -23,7 +23,6 @@ def openConnection():
     cnx = mysql.connector.connect(user = config.MYSQL_USERNAME, password = config.MYSQL_PASSWORD,
                                     host = config.MYSQL_HOST, allow_local_infile=True,
                                     database = config.MYSQL_DB )
-    cursor = cnx.cursor()
     return cnx
 
 
@@ -130,6 +129,7 @@ def newKindPlot(kindId, traceId, timeline, county):
             pad=4
         )
     )
+    closeConnection(cnx)
     username = 'rohithravin' # your username
     api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
