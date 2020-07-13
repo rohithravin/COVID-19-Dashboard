@@ -10,12 +10,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { CoronaDashboardApiService } from './corona-dashboard-api.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ForecastDashboardComponent } from './forecast-dashboard/forecast-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CaliDashboardComponent,
-    WorldDashboardComponent
+    WorldDashboardComponent,
+    ForecastDashboardComponent
   ],
   imports: [
     BrowserModule,
