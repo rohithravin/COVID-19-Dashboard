@@ -88,10 +88,6 @@ def newKindPlot(kindId, traceId, timeline, county):
         if kind_timeline != None:
                 df_sub = df_sub.head(kind_timeline)
         fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[kind_type[1]], mode='lines+markers', name=county))
-        fig.update_layout(
-            xaxis_title="# of People",
-            yaxis_title="Date",
-        )
     elif kind_trace == 'high_populous':
         sql_stm = 'SELECT date , county,{}  FROM corona.cali_cases WHERE county IN ({})'.format(kind_type[1], "'" + '\',\''.join(config.HIGH_POPULOUS_COUNTIES) + "'")
         df = pd.read_sql(sql_stm, con = cnx)
@@ -100,10 +96,6 @@ def newKindPlot(kindId, traceId, timeline, county):
             if kind_timeline != None:
                 df_sub = df_sub.head(kind_timeline)
             fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[kind_type[1]], mode='lines+markers', name=county))
-        fig.update_layout(
-            xaxis_title="# of People",
-            yaxis_title="Date",
-        )
     elif kind_trace == 'socal':
         sql_stm = 'SELECT date , county,{}  FROM corona.cali_cases WHERE county IN ({})'.format(kind_type[1], "'" + '\',\''.join(config.SOCAL_COUNTIES) + "'")
         df = pd.read_sql(sql_stm, con = cnx)
@@ -112,10 +104,6 @@ def newKindPlot(kindId, traceId, timeline, county):
             if kind_timeline != None:
                 df_sub = df_sub.head(kind_timeline)
             fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[kind_type[1]], mode='lines+markers', name=county))
-        fig.update_layout(
-            xaxis_title="# of People",
-            yaxis_title="Date",
-        )
     elif kind_trace == 'bay_area':
         sql_stm = 'SELECT date , county,{}  FROM corona.cali_cases WHERE county IN ({})'.format(kind_type[1], "'" + '\',\''.join(config.BAY_AREA_COUNTIES) + "'")
         df = pd.read_sql(sql_stm, con = cnx)
@@ -124,21 +112,24 @@ def newKindPlot(kindId, traceId, timeline, county):
             if kind_timeline != None:
                 df_sub = df_sub.head(kind_timeline)
             fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[kind_type[1]], mode='lines+markers', name=county))
-        fig.update_layout(
-            xaxis_title="# of People",
-            yaxis_title="Date",
-        )
     elif kind_trace == 'state':
-        sql_stm = 'SELECT date , SUM({}) as {}  FROM corona.cali_cases GROUP BY date'.format(kind_type[1],kind_type[1],kind_timeline)
+        sql_stm = 'SELECT date , SUM({}) as {}  FROM corona.cali_cases GROUP BY date'.format(kind_type[1],kind_type[1])
         df = pd.read_sql(sql_stm, con = cnx)
         df_sub = df.sort_values(by='date', ascending=False)
         if kind_timeline != None:
                 df_sub = df_sub.head(kind_timeline)
         fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[kind_type[1]], mode='lines+markers', name='California'))
-        fig.update_layout(
-            xaxis_title="# of People",
-            yaxis_title="Date",
+    fig.update_layout(
+         xaxis_title="# of People",
+        yaxis_title="Date",
+        margin=dict(
+            l=50,
+            r=50,
+            b=0,
+            t=0,
+            pad=4
         )
+    )
     username = 'rohithravin' # your username
     api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
