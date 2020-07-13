@@ -23,7 +23,6 @@ def openConnection():
     cnx = mysql.connector.connect(user = config.MYSQL_USERNAME, password = config.MYSQL_PASSWORD,
                                     host = config.MYSQL_HOST, allow_local_infile=True,
                                     database = config.MYSQL_DB )
-    cursor = cnx.cursor()
     return cnx
 
 
@@ -34,6 +33,117 @@ def openConnection():
 # ----------------------------- #
 def closeConnection(cnx):
     cnx.close()
+
+
+# ----------------------------- #
+#
+#   GET Total CASES/DEATH PLOT  #
+#
+# ----------------------------- #
+totalKindPlotInfo = {
+                'kind':{601: ['total_cases', 'totalcountconfirmed'], 602: ['total_deaths','totalcountdeaths']}, 
+                'trace': {401:'county' , 402: 'state', 403: 'bay_area' ,404: 'socal' , 405:'nocal_socal' ,406: 'bay_area_socal', 407:'high_populous'}
+               }
+def updateTotalPlot(kindId, traceId, county):
+    BAR_WIDTH = 0.5
+    cnx = openConnection()
+    kind_type = totalKindPlotInfo['kind'][kindId]
+    kind_trace = totalKindPlotInfo['trace'][traceId]
+    fig = go.Figure()
+    if kind_trace == 'nocal_socal':
+        sql_stm_socal = "SELECT SUM({}) as {} FROM corona.cali_cases WHERE county IN ({}) GROUP BY date ORDER BY date Desc LIMIT 1".format(kind_type[1],kind_type[1],"'" + '\',\''.join(config.SOCAL_COUNTIES) + "'" )
+        sql_stm_norcal = "SELECT SUM({}) as {} FROM corona.cali_cases WHERE county IN ({}) GROUP BY date ORDER BY date Desc LIMIT 1".format(kind_type[1],kind_type[1],"'" + '\',\''.join(config.NORCAL_COUNTIES) + "'" )
+        total_num_socal = int(pd.read_sql(sql_stm_socal, con = cnx)[kind_type[1]])
+        total_num_norcal = int(pd.read_sql(sql_stm_norcal, con = cnx)[kind_type[1]])
+        fig.add_trace(go.Bar(
+            x=['SOCAL'],
+            y=[total_num_socal],
+            width=[BAR_WIDTH]
+        ))
+        fig.add_trace(go.Bar(
+            x=['NORCAL'],
+            y=[total_num_norcal],
+            width=[BAR_WIDTH]
+        ))
+    elif kind_trace == 'bay_area_socal':
+        sql_stm_socal = "SELECT SUM({}) as {} FROM corona.cali_cases WHERE county IN ({}) GROUP BY date ORDER BY date Desc LIMIT 1".format(kind_type[1],kind_type[1],"'" + '\',\''.join(config.SOCAL_COUNTIES) + "'" )
+        sql_stm_bayarea = "SELECT SUM({}) as {} FROM corona.cali_cases WHERE county IN ({}) GROUP BY date ORDER BY date Desc LIMIT 1".format(kind_type[1],kind_type[1],"'" + '\',\''.join(config.BAY_AREA_COUNTIES) + "'" )
+        total_num_socal = int(pd.read_sql(sql_stm_socal, con = cnx)[kind_type[1]])
+        total_num_bayarea = int(pd.read_sql(sql_stm_bayarea, con = cnx)[kind_type[1]])
+        fig.add_trace(go.Bar(
+            x=['SOCAL'],
+            y=[total_num_socal],
+            width=[BAR_WIDTH]
+        ))
+        fig.add_trace(go.Bar(
+            x=['Bay Area'],
+            y=[total_num_bayarea],
+            width=[BAR_WIDTH]
+        ))
+    elif kind_trace == 'county':
+        sql_stm = "SELECT {} FROM corona.cali_cases WHERE county = '{}' ORDER BY date DESC LIMIT 1".format(kind_type[1],county)
+        total_num = int(pd.read_sql(sql_stm, con = cnx)[kind_type[1]])
+        fig.add_trace(go.Bar(
+            x=[county],
+            y=[total_num],
+            width=[BAR_WIDTH]
+        ))
+    elif kind_trace == 'state':
+        sql_stm = "SELECT date, sum({}) as {} FROM corona.cali_cases GROUP BY date ORDER BY date DESC LIMIT 1".format(kind_type[1],kind_type[1])
+        total_num = int(pd.read_sql(sql_stm, con = cnx)[kind_type[1]])
+        fig.add_trace(go.Bar(
+            x=['California'],
+            y=[total_num],
+            width=[BAR_WIDTH]
+        ))
+    elif kind_trace == 'bay_area':
+        sql_stm = "SELECT county, {} FROM corona.cali_cases WHERE county IN ({}) AND date = (SELECT date FROM corona.cali_cases ORDER BY date DESC LIMIT 1)".format(kind_type[1],"'" + '\',\''.join(config.BAY_AREA_COUNTIES) + "'" )
+        df = pd.read_sql(sql_stm, con = cnx)
+        for index, row in df.iterrows():
+            fig.add_trace(go.Bar(
+                x=[row['county']],
+                y=[row[kind_type[1]]],
+                width=[BAR_WIDTH]
+            ))
+    elif kind_trace == 'high_populous':
+        sql_stm = "SELECT county, {} FROM corona.cali_cases WHERE county IN ({}) AND date = (SELECT date FROM corona.cali_cases ORDER BY date DESC LIMIT 1)".format(kind_type[1],"'" + '\',\''.join(config.HIGH_POPULOUS_COUNTIES) + "'" )
+        df = pd.read_sql(sql_stm, con = cnx)
+        for index, row in df.iterrows():
+            fig.add_trace(go.Bar(
+                x=[row['county']],
+                y=[row[kind_type[1]]],
+                width=[BAR_WIDTH]
+            ))
+    elif kind_trace == 'socal':
+        sql_stm = "SELECT county, {} FROM corona.cali_cases WHERE county IN ({}) AND date = (SELECT date FROM corona.cali_cases ORDER BY date DESC LIMIT 1)".format(kind_type[1],"'" + '\',\''.join(config.SOCAL_COUNTIES) + "'" )
+        df = pd.read_sql(sql_stm, con = cnx)
+        for index, row in df.iterrows():
+            fig.add_trace(go.Bar(
+                x=[row['county']],
+                y=[row[kind_type[1]]],
+                width=[BAR_WIDTH]
+            ))
+    fig.update_layout(
+        margin=dict(
+            l=50,
+            r=50,
+            b=0,
+            t=0,
+            pad=4
+        ),
+        showlegend=False
+    )
+    closeConnection(cnx)
+    username = 'rohithravin' # your username
+    api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
+    chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
+    fig_url = py.plot(fig, auto_open=False)
+    html = tls.get_embed(fig_url)
+    final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
+    print(json.dumps({'Plot Link': final_html_link}))
+        
+
+
 
 # ----------------------------- #
 #
@@ -130,6 +240,7 @@ def newKindPlot(kindId, traceId, timeline, county):
             pad=4
         )
     )
+    closeConnection(cnx)
     username = 'rohithravin' # your username
     api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
@@ -248,6 +359,27 @@ if sys.argv[1] == '--calDailyData':
         print("County argument not a county.", file=sys.stderr)
         exit(3)
     getDailyData(county_input)
+elif sys.argv[1] == '--updateTotalPlot':
+    if len(sys.argv) < 5:
+        print("Invalid argument list. python cali-dashboard.py [method-flag] [kindId] [traceId] [county]", file=sys.stderr)
+        exit(1)
+    try:
+        kindId = int(sys.argv[2])
+        traceId = int(sys.argv[3])
+    except Exception as err:
+        print("Argument not a number.", file=sys.stderr)
+        exit(2)
+    county_input = ' '.join(list(sys.argv)[4:])
+    if county_input not in config.ALL_COUNTIES:
+        print("County argument not a county.", file=sys.stderr)
+        exit(3)
+    if kindId not in [601,602]:
+        print("kindId argument not a valid id.", file=sys.stderr)
+        exit(5)
+    if traceId not in [401,402,403,404,405,406,407]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(6)
+    updateTotalPlot(kindId, traceId, county_input)
 elif sys.argv[1] == '--updateNewPlot':
     if len(sys.argv) < 6:
         print("Invalid argument list. python cali-dashboard.py [method-flag] [kindId] [traceId] [timelineId] [county]", file=sys.stderr)
@@ -272,9 +404,6 @@ elif sys.argv[1] == '--updateNewPlot':
     if timelineId not in [501,502,503,504]:
         print("traceId argument not a valid id.", file=sys.stderr)
         exit(6)
-    if county_input not in config.ALL_COUNTIES:
-        print("County argument not a county.", file=sys.stderr)
-        exit(3)
     newKindPlot(kindId,traceId,timelineId,county_input)
 else:
     print("Invalid flag argument. python cali-dashboard.py [method-flag]", file=sys.stderr)
