@@ -22,6 +22,7 @@ router.post('/getDailyData', (req,res) => {
 router.post('/getPlotNewKind', (req,res) => {
     const data = JSON.parse(req.body['data'])
     console.log(`cali-dashboard.py --updateNewPlot [INFO]: Start.`);
+    console.log(data)
     const subprocess =  spawn('python', ["-u", './scripts/cali-dashboard.py','--updateNewPlot' , data['plotKindId'], data['plotTraceId'], data['plotTimeline'], data['county'] ]);
     // print output of script
     subprocess.stdout.on('data', (data) => {
@@ -40,7 +41,7 @@ router.post('/getPlotNewKind', (req,res) => {
 router.post('/getPlotTotalKind', (req,res) => {
     const data = JSON.parse(req.body['data'])
     console.log(`cali-dashboard.py --updateTotalPlot [INFO]: Start.`);
-    const subprocess =  spawn('python', ["-u", './scripts/cali-dashboard.py','--updateNewPlot' , data['plotKindId'], data['plotTraceId'], data['county'] ]);
+    const subprocess =  spawn('python', ["-u", './scripts/cali-dashboard.py','--updateTotalPlot' , data['plotKindId'], data['plotTraceId'], data['county'] ]);
     // print output of script
     subprocess.stdout.on('data', (data) => {
         console.log(`cali-dashboard.py --updateTotalPlot [INFO]:${data}`);

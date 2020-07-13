@@ -99,6 +99,7 @@ export class CaliDashboardComponent implements OnInit {
     this.loadDailyData()
     console.log(this.plotNewKind)
     this.updateNewKindPlot(this.plotNewKindSelected, this.plotNewTraceSelected,this.plotNewTimeline)
+    this.updateTotalPlot(this.plotTotalKindSelected, this.plotTotalTraceSelected)
     
    }
 
@@ -123,7 +124,7 @@ export class CaliDashboardComponent implements OnInit {
     this.showPlotTotal = false;
     console.log(plotKind)
     console.log(plotKindTrace)
-    var err = this._apiService.getPlotNewKind({'plotKindId': plotKind.id, 'plotTraceId':plotKindTrace.id,county: this.userLocationData['county'] });
+    var err = this._apiService.getPlotTotalKind({'plotKindId': plotKind.id, 'plotTraceId':plotKindTrace.id,county: this.userLocationData['county'] });
     err.subscribe( data => { 
       if (data['sucess'] == 501){
           this._snackBar.open('[ERROR]: Server error. Please try again later.', 'Close', {
