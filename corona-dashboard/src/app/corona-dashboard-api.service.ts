@@ -28,6 +28,11 @@ export class CoronaDashboardApiService {
     return this._httpClient.post('http://localhost:3000/cali/getDailyData', { county: payload }, this.httpOptions).pipe( catchError(this.handleError));
   }
 
+  getPlotMixedKind(data){
+    const payload  = JSON.stringify(data);
+    return this._httpClient.post('http://localhost:3000/cali/getMixedTotalKind', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
+  }
+
   getPlotNewKind(data){
     const payload  = JSON.stringify(data);
     return this._httpClient.post('http://localhost:3000/cali/getPlotNewKind', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));

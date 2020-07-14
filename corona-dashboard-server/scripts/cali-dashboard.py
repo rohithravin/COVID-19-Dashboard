@@ -143,9 +143,9 @@ def updateTotalPlot(kindId, traceId, county):
     )
     closeConnection(cnx)
     username = 'rohithravin' # your username
-    api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
+    api_key = '103CeGHnSkDCN3H1e9YD' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
-    fig_url = py.plot(fig, auto_open=False)
+    fig_url = py.plot(fig, filename = 'mixed_plot', auto_open=False)
     html = tls.get_embed(fig_url)
     final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
     print(json.dumps({'Plot Link': final_html_link}))
@@ -163,7 +163,7 @@ mixedPlotInfo = {
                 
                 'trace': {801:['total_cases',{701: 'totalpositive', 702: 'totalpositive2', 703:'cases'}],
                           802: ['total_deaths',{701: 'deaths', 702: 'deaths', 703:'deaths'}],
-                          803: ['death_percentage',{701: 'deaths_percentage', 702: 'deaths_percentage', 703:'death_percentage'}],
+                          803: ['death_percentage',{701: 'deaths_percentage', 702: 'deaths_percent', 703:'death_percentage'}],
                           804: ['case_percentage',{701: 'case_percent', 702: 'case_percent', 703:'case_percentage'}] }
                }
 
@@ -196,9 +196,9 @@ def updateGroupsKindPlot(kindId,traceId,timelineId):
         )
     )
     username = 'rohithravin' # your username
-    api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
+    api_key = '103CeGHnSkDCN3H1e9YD' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
-    fig_url = py.plot(fig, auto_open=False)
+    fig_url = py.plot(fig, filename = 'total_case_death_plot', auto_open=False)
     html = tls.get_embed(fig_url)
     final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
     print(json.dumps({'Plot Link': final_html_link}))
@@ -295,7 +295,7 @@ def newKindPlot(kindId, traceId, timeline, county):
     )
     closeConnection(cnx)
     username = 'rohithravin' # your username
-    api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
+    api_key = '103CeGHnSkDCN3H1e9YD' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
     fig_url = py.plot(fig, filename = 'new_case_death_plot', auto_open=False)
     html = tls.get_embed(fig_url)

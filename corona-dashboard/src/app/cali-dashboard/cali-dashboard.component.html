@@ -107,7 +107,7 @@
                                 <div *ngIf="this.showPlotNew == true" class="row" style="margin-top: 10px;">
                                     <div class="col text-center" *ngFor="let button of this.plotNewTimeline"> 
                                         <div class="col text-center">
-                                            <button  [ngClass]="button.selected ? 'btn btn-light text-info border rounded border-white' : 'btn text-muted border rounded border-white' " type="button" (click)="updateButtonSelected(button.id, this.plotNewTimeline,this.plotNewKindSelected,this.plotNewTraceSelected)" >{{button.name}}</button>
+                                            <button  [ngClass]="button.selected ? 'btn btn-light text-info border rounded border-white' : 'btn text-muted border rounded border-white' " type="button" (click)="updateButtonSelected('new',button.id, this.plotNewTimeline,this.plotNewKindSelected,this.plotNewTraceSelected)" >{{button.name}}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -121,10 +121,32 @@
                     <div class="col-lg-7 col-xl-8">
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h6 class="text-primary font-weight-bold m-0">Earnings Overview</h6>
+                                <select  [(ngModel)]="this.plotMixedKindSelected" (change)="this.updateMixedKindPlot(this.plotMixedKindSelected,this.plotMixedTraceSelected,this.plotMixedTimeline)"  style="font-size:15px; background: #f8f9fc; border:0px; outline:0px;">
+                                    <option *ngFor="let kind of this.plotMixedKind" [ngValue]="kind"> {{kind.name}} </option>
+                                  </select>
+                                  <select  [(ngModel)]="this.plotMixedTraceSelected" (change)="this.updateMixedKindPlot(this.plotMixedKindSelected,this.plotMixedTraceSelected,this.plotMixedTimeline)" style=" font-size:15px; color:#fdfefe; background: #717384; border:0px; border-radius:5px; padding:5px; outline:0px;">
+                                    <option *ngFor="let trace of this.plotMixedTrace" [ngValue]="trace"> {{trace.name}} </option>
+                                  </select>
                             </div>
-                            <div class="card-body">
-                                <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~rohithravin1/26.embed?showlink=false&modebar=false" height="500" width="100%"></iframe>
+                            <div  class="card-body">
+
+                                <div *ngIf="this.showMixedPlot == false" class="row" style="height: 300px;">
+                                    <div class="col text-center align-self-center">
+                                        <h1>Loading Visuals...</h1>
+                                    </div>
+                                </div>
+
+                                <iframe *ngIf="this.showMixedPlot == true" id="igraph" scrolling="no" style="border:none;" seamless="seamless" [src]="this.plotMixedLink" height="500" width="100%"></iframe>
+                                
+                                <div *ngIf="this.showMixedPlot == true" class="row" style="margin-top: 10px;">
+                                    <div class="col text-center" *ngFor="let button of this.plotMixedTimeline"> 
+                                        <div class="col text-center">
+                                            <button  [ngClass]="button.selected ? 'btn btn-light text-info border rounded border-white' : 'btn text-muted border rounded border-white' " type="button" (click)="updateButtonSelected('mixed' ,button.id, this.plotMixedTimeline,this.plotMixedKindSelected,this.plotMixedTraceSelected)" >{{button.name}}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                               
                             </div>
                         </div>
                     </div>

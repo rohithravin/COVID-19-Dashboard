@@ -58,8 +58,9 @@ router.post('/getPlotTotalKind', (req,res) => {
 
 router.post('/getMixedTotalKind', (req,res) => {
     const data = JSON.parse(req.body['data'])
+    console.log(data)
     console.log(`cali-dashboard.py --updateMixedPlots [INFO]: Start.`);
-    const subprocess =  spawn('python', ["-u", './scripts/cali-dashboard.py','--updateMixedPlots' , data['plotKindId'], data['plotTraceId'], data['timelineId'] ]);
+    const subprocess =  spawn('python', ["-u", './scripts/cali-dashboard.py','--updateMixedPlots' , data['plotKindId'], data['plotTraceId'], data['plotTimeline'] ]);
     // print output of script
     subprocess.stdout.on('data', (data) => {
         console.log(`cali-dashboard.py --updateMixedPlots [INFO]:${data}`);
