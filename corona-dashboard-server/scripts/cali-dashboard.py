@@ -14,6 +14,9 @@ import chart_studio.plotly as py
 import chart_studio.tools as tls
 import chart_studio
 
+PLOTLY_USERNAME = 'corona_dashboard'
+PLOTLY_API_KEY = 'O2OxLYXntLMqm2Ll0AtO'
+
 plotTimeLine = {
     501: 14,
     502: 30,
@@ -144,7 +147,7 @@ def updateTotalPlot(kindId, traceId, county):
     closeConnection(cnx)
     username = 'rohithravin1' # your username
     api_key = 'cR8BpQTG0bLpjJdLURX5' # your api key - go to profile > settings > regenerate key
-    chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
+    chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
     fig_url = py.plot(fig, filename = 'mixed_plot', auto_open=False)
     html = tls.get_embed(fig_url)
     final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
@@ -197,7 +200,7 @@ def updateGroupsKindPlot(kindId,traceId,timelineId):
     )
     username = 'rohithravin1' # your username
     api_key = 'cR8BpQTG0bLpjJdLURX5' # your api key - go to profile > settings > regenerate key
-    chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
+    chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
     fig_url = py.plot(fig, filename = 'total_case_death_plot', auto_open=False)
     html = tls.get_embed(fig_url)
     final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
@@ -296,7 +299,7 @@ def newKindPlot(kindId, traceId, timeline, county):
     closeConnection(cnx)
     username = 'rohithravin1' # your username
     api_key = 'cR8BpQTG0bLpjJdLURX5' # your api key - go to profile > settings > regenerate key
-    chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
+    chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
     fig_url = py.plot(fig, filename = 'new_case_death_plot', auto_open=False)
     html = tls.get_embed(fig_url)
     final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
