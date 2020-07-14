@@ -10,7 +10,12 @@ cnx = mysql.connector.connect(user = config.MYSQL_USERNAME, password = config.MY
 cursor = cnx.cursor()
 
 for key in config.DATA_URLS.keys():
-    data = pd.read_csv(config.DATA_URLS[key]).dropna()
+    data = pd.read_csv(config.DATA_URLS[key])
+    if key in ['world_location', 'world_data']:
+        data = data.fillna(0)
+    else:
+        data = data.dropna()
+
     mysql_data = [tuple(x) for x in data.values.tolist()]
 
     print("Clearing {} data: ".format(key), end="")

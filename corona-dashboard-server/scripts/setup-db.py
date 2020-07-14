@@ -22,7 +22,7 @@ TABLES['world_location'] = (
 
 TABLES['world_data'] = (
     "CREATE TABLE `world_data` ("
-    "`data` DATE NOT NULL,"
+    "`date` DATE NOT NULL,"
     "`location` VARCHAR(250) NOT NULL,"
     "`new_cases` INT NOT NULL,"
     "`new_deaths` INT NOT NULL,"
