@@ -14,6 +14,14 @@ import chart_studio.plotly as py
 import chart_studio.tools as tls
 import chart_studio
 
+plotTimeLine = {
+    501: 14,
+    502: 30,
+    503: 90,
+    504: None
+}
+
+
 # ----------------------------- #
 #
 #     OPEN MYSQL CONNECTION     #
@@ -134,15 +142,66 @@ def updateTotalPlot(kindId, traceId, county):
         showlegend=False
     )
     closeConnection(cnx)
-    username = 'rohithravin' # your username
-    api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
+    username = 'rohithravin1' # your username
+    api_key = 'cR8BpQTG0bLpjJdLURX5' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
-    fig_url = py.plot(fig, auto_open=False)
+    fig_url = py.plot(fig, filename = 'mixed_plot', auto_open=False)
     html = tls.get_embed(fig_url)
     final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
     print(json.dumps({'Plot Link': final_html_link}))
         
 
+# ----------------------------- #
+#
+#         GET MIXED PLOTS       #
+#
+# ----------------------------- #
+mixedPlotInfo = {
+                'kind':{701: ['age_group', 'cali_cases_age'],
+                        702: ['sex','cali_cases_sex'],
+                        703: ['race_ethnicity', 'cali_cases_race'] }, 
+                
+                'trace': {801:['total_cases',{701: 'totalpositive', 702: 'totalpositive2', 703:'cases'}],
+                          802: ['total_deaths',{701: 'deaths', 702: 'deaths', 703:'deaths'}],
+                          803: ['death_percentage',{701: 'deaths_percentage', 702: 'deaths_percent', 703:'death_percentage'}],
+                          804: ['case_percentage',{701: 'case_percent', 702: 'case_percent', 703:'case_percentage'}] }
+               }
+
+def updateGroupsKindPlot(kindId,traceId,timelineId):
+    cnx = openConnection()
+    plotKind = mixedPlotInfo['kind'][kindId]
+    plotTrace = mixedPlotInfo['trace'][traceId]
+    timeline = plotTimeLine[timelineId]
+    fig = go.Figure()
+    sql_stm = "SELECT {}, date, {} FROM {}".format(plotKind[0],plotTrace[1][kindId],plotKind[1])
+    df = pd.read_sql(sql_stm, con = cnx)
+    if plotKind[1] == 'cali_cases_age':
+        df = df.replace(to_replace ="65 and Older", value ="65+")  
+        df = df.replace(to_replace ="Missing", value ="Unknown")  
+    elif plotKind[1] == 'cali_cases_race':
+        df = df.replace(to_replace ="Native Hawaiian and other Pacific Islander", value ="Native Hawaiian or Pacific Islander")  
+        df = df.replace(to_replace ="Multi-Race", value ="Multiracial")  
+    for group in list(df[plotKind[0]].unique()):
+        df_sub = df.loc[df[plotKind[0]] == group].sort_values(by='date', ascending=False)            
+        if timeline != None:
+            df_sub = df_sub.head(timeline)
+        fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[plotTrace[1][kindId]], mode='lines+markers', name=group))
+    fig.update_layout(
+        margin=dict(
+            l=50,
+            r=50,
+            b=0,
+            t=0,
+            pad=4
+        )
+    )
+    username = 'rohithravin1' # your username
+    api_key = 'cR8BpQTG0bLpjJdLURX5' # your api key - go to profile > settings > regenerate key
+    chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
+    fig_url = py.plot(fig, filename = 'total_case_death_plot', auto_open=False)
+    html = tls.get_embed(fig_url)
+    final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
+    print(json.dumps({'Plot Link': final_html_link}))
 
 
 # ----------------------------- #
@@ -154,12 +213,6 @@ newKindPlotInfo = {
                 'kind':{301: ['new_cases', 'newcountconfirmed'], 302: ['new_deaths','newcountdeaths']}, 
                 'trace': {401:'county' , 402: 'state', 403: 'bay_area' ,404: 'socal' , 405:'nocal_socal' ,406: 'bay_area_socal', 407:'high_populous'}
                }
-plotTimeLine = {
-    501: 14,
-    502: 30,
-    503: 90,
-    504: None
-}
 
 def newKindPlot(kindId, traceId, timeline, county):
     cnx = openConnection()
@@ -241,8 +294,8 @@ def newKindPlot(kindId, traceId, timeline, county):
         )
     )
     closeConnection(cnx)
-    username = 'rohithravin' # your username
-    api_key = 'OkgmZv3fqjkRl3XGs7Gf' # your api key - go to profile > settings > regenerate key
+    username = 'rohithravin1' # your username
+    api_key = 'cR8BpQTG0bLpjJdLURX5' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=username, api_key=api_key)
     fig_url = py.plot(fig, filename = 'new_case_death_plot', auto_open=False)
     html = tls.get_embed(fig_url)
@@ -359,6 +412,27 @@ if sys.argv[1] == '--calDailyData':
         print("County argument not a county.", file=sys.stderr)
         exit(3)
     getDailyData(county_input)
+elif sys.argv[1] == '--updateMixedPlots':
+    if len(sys.argv) < 5:
+        print("Invalid argument list. python cali-dashboard.py [method-flag] [kindId] [traceId] [timelineId]", file=sys.stderr)
+        exit(1)
+    try:
+        kindId = int(sys.argv[2])
+        traceId = int(sys.argv[3])
+        timelineId = int(sys.argv[4])
+    except Exception as err:
+        print("Argument not a number.", file=sys.stderr)
+        exit(2)
+    if kindId not in [701,702, 703]:
+        print("kindId argument not a valid id.", file=sys.stderr)
+        exit(5)
+    if traceId not in [801,802,803,804]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(6)
+    if timelineId not in [501,502,503,504]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(6)
+    updateGroupsKindPlot(kindId,traceId,timelineId)
 elif sys.argv[1] == '--updateTotalPlot':
     if len(sys.argv) < 5:
         print("Invalid argument list. python cali-dashboard.py [method-flag] [kindId] [traceId] [county]", file=sys.stderr)

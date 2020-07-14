@@ -41,6 +41,15 @@ export class CaliDashboardComponent implements OnInit {
   plotNewLink:SafeResourceUrl;
   showPlotNew: boolean;
 
+
+  plotMixedKind: plotDropDowns[];
+  plotMixedKindSelected: plotDropDowns;
+  plotMixedTrace: plotDropDowns[];
+  plotMixedTraceSelected: plotDropDowns;
+  plotMixedTimeline:plotTimelineButton[];
+  plotMixedLink: SafeResourceUrl;
+  showMixedPlot:boolean;
+
   plotTotalKind: plotDropDowns[];
   plotTotalKindSelected: plotDropDowns;
   plotTotalTrace: plotDropDowns[];
@@ -69,6 +78,29 @@ export class CaliDashboardComponent implements OnInit {
     ]
     this.plotTotalTraceSelected = this.plotTotalTrace[0];
     this.showPlotTotal = false;
+
+
+    this.plotMixedKind = [
+      {id: 701, name: 'Age'},
+      {id: 702, name: 'Gender'},
+      {id: 703, name: 'Race'}
+    ]
+    this.plotMixedKindSelected = this.plotMixedKind[0]
+    this.plotMixedTrace = [
+      {id: 801, name: 'Total Cases'},
+      {id: 802, name: 'Total Deaths'},
+      {id: 803, name: 'Death Percentage'},
+      {id: 804, name: 'Case Percentage'}
+    ]
+    this.plotMixedTraceSelected = this.plotMixedTrace[0]
+    this.showMixedPlot = false;
+    this.plotMixedTimeline = [
+      {id: 501, name: '2 Weeks', selected: true},
+      {id: 502, name: 'Month', selected: false},
+      {id: 503, name: '3 Months', selected: false},
+      {id: 504, name: 'All', selected: false},
+    ]
+
 
     this.plotNewTimeline = [
       {id: 501, name: '2 Weeks', selected: true},
@@ -99,11 +131,12 @@ export class CaliDashboardComponent implements OnInit {
     this.loadDailyData()
     console.log(this.plotNewKind)
     this.updateNewKindPlot(this.plotNewKindSelected, this.plotNewTraceSelected,this.plotNewTimeline)
+    this.updateMixedKindPlot(this.plotMixedKindSelected, this.plotMixedTraceSelected, this.plotNewTimeline)
     this.updateTotalPlot(this.plotTotalKindSelected, this.plotTotalTraceSelected)
     
    }
 
-  updateButtonSelected(buttonId:number, buttonList:plotTimelineButton[], plotKind: plotDropDowns, plotKindTrace: plotDropDowns){
+  updateButtonSelected(typePlot:string, buttonId:number, buttonList:plotTimelineButton[], plotKind: plotDropDowns, plotKindTrace: plotDropDowns){
     var updatePlotFlag = false;
     
     for (let x in buttonList){
@@ -116,7 +149,12 @@ export class CaliDashboardComponent implements OnInit {
       }
     }
     if (updatePlotFlag){
-      this.updateNewKindPlot(plotKind, plotKindTrace, buttonList)
+      if (typePlot == 'new'){
+        this.updateNewKindPlot(plotKind, plotKindTrace, buttonList)
+      }
+      else if (typePlot == 'mixed'){
+        this.updateMixedKindPlot(plotKind, plotKindTrace, buttonList)
+      }
     }
   }
 
@@ -147,6 +185,45 @@ export class CaliDashboardComponent implements OnInit {
       }
     });
   }
+
+  updateMixedKindPlot(plotKind: plotDropDowns, plotKindTrace: plotDropDowns, plotTimeline:plotTimelineButton[]){
+    console.log(plotKind)
+    console.log(plotKindTrace)
+    console.log(plotTimeline)
+
+    this.showMixedPlot = false;
+    var updatedPlotTimeline = -1;
+    for (let x in plotTimeline){
+      if (plotTimeline[x]['selected'] == true ){
+          updatedPlotTimeline = plotTimeline[x]['id']
+      }
+    }
+
+    var err = this._apiService.getPlotMixedKind({'plotKindId': plotKind.id, 'plotTraceId':plotKindTrace.id, 'plotTimeline':updatedPlotTimeline});
+    err.subscribe( data => { 
+      if (data['sucess'] == 501){
+          this._snackBar.open('[ERROR]: Server error. Please try again later.', 'Close', {
+            panelClass: 'snack-bar',
+            duration: 2500
+          });
+          this.showMixedPlot = false;
+      }
+      else if (data['sucess'] == 100){
+        console.log(data['data']['Plot Link'])
+        this.plotMixedLink = this._sanitizer.bypassSecurityTrustResourceUrl(data['data']['Plot Link']);
+        this.showMixedPlot = true;
+      }
+      else {
+        this._snackBar.open( 'ERROR: Server not responding. Try again later.', 'Close', {
+          panelClass: 'snack-bar',
+          duration: 2500
+        });
+        this.showMixedPlot = false;
+      }
+    });
+
+  }
+
 
   updateNewKindPlot(plotKind: plotDropDowns, plotKindTrace: plotDropDowns, plotTimeline:plotTimelineButton[]){
     this.showPlotNew = false;
