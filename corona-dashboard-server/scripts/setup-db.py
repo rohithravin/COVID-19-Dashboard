@@ -11,6 +11,29 @@ cursor = cnx.cursor()
 
 TABLES = {}
 
+TABLES['world_location'] = (
+    "CREATE TABLE `world_location` ("
+    "`countriesAndTerritories` VARCHAR(250) NOT NULL,"
+    "`location` VARCHAR(250) NOT NULL,"
+    "`continent` VARCHAR(250) NOT NULL,"
+    "`population_year` INT NOT NULL,"
+    "`population` INT NOT NULL"
+    ") ENGINE=InnoDB")
+
+TABLES['world_data'] = (
+    "CREATE TABLE `world_data` ("
+    "`data` DATE NOT NULL,"
+    "`location` VARCHAR(250) NOT NULL,"
+    "`new_cases` INT NOT NULL,"
+    "`new_deaths` INT NOT NULL,"
+    "`total_cases` INT NOT NULL,"
+    "`total_deaths` INT NOT NULL,"
+    "`weekly_cases` INT NOT NULL,"
+    "`weekly_deaths` INT NOT NULL,"
+    "`biweekly_cases` INT NOT NULL,"
+    "`biweekly_deaths` INT NOT NULL"
+    ") ENGINE=InnoDB")
+
 TABLES['zipcode'] = (
     "CREATE TABLE `zipcode` ("
     "  `zipcode` INT NOT NULL,"
