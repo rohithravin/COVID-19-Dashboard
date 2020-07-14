@@ -68,7 +68,6 @@ export class CaliDashboardComponent implements OnInit {
     this.plotTotalKindSelected = this.plotTotalKind[0];
 
     this.plotTotalTrace = [
-      {id: 401, name: 'County'},
       {id: 402, name: 'State'},
       {id: 403, name: 'Bay Area Counties'},
       {id: 404, name: 'SoCal Counties'},
@@ -76,7 +75,7 @@ export class CaliDashboardComponent implements OnInit {
       {id: 406, name: 'Bay Area v SoCal'},
       {id: 407, name: 'High Populous Area'}
     ]
-    this.plotTotalTraceSelected = this.plotTotalTrace[0];
+    this.plotTotalTraceSelected = this.plotTotalTrace[1];
     this.showPlotTotal = false;
 
 
