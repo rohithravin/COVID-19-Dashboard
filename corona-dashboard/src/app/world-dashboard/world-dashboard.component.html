@@ -43,62 +43,34 @@
                                         <h6 class="text-primary font-weight-bold m-0">Top Countries</h6>
                                     </div>
                                     <div class="col text-right align-self-center">
-                                        <div class="dropdown"><button class="btn btn-light btn-sm dropdown-toggle text-right border rounded border-light" data-toggle="dropdown" aria-expanded="false" type="button">New Deaths (Today)</button>
-                                            <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="#">First Item</a><a class="dropdown-item" role="presentation" href="#">Second Item</a><a class="dropdown-item" role="presentation" href="#">Third Item</a></div>
-                                        </div>
+                                        <select  [(ngModel)]="this.topCountriesTraceDropdownSelected" (change)="this.updateTopCountriesData(this.topCountriesTraceDropdownSelected)" style="font-size:15px; background: #f8f9fc; border:0px; outline:0px;">
+                                            <option *ngFor="let kind of this.topCountriesTraceDropdown" [ngValue]="kind"> {{kind.name}} </option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
+
+                                <div *ngIf="this.showTopCountriesData == false">
+                                <li  class="list-group-item" *ngFor="let number of [0,1,2,3,4,6,5]">
                                     <div class="row align-items-center no-gutters">
                                         <div class="col mr-2">
-                                            <h6 class="mb-0"><strong>Country Name</strong></h6><span class="text-xs">% Based On Total Population: 89%</span></div>
-                                        <div class="col-auto"><span style="margin-right: 10px;">Text</span><i class="fa fa-star"></i></div>
+                                            <h6 class="mb-0"><strong> - </strong></h6><span class="text-xs"></span></div>
+                                        <div class="col-auto"><span style="margin-right: 10px;">-</span><i class="fa fa-star"></i></div>
                                     </div>
                                 </li>
-                                <li class="list-group-item">
+                            </div>
+                                <div *ngIf="this.showTopCountriesData == true">
+                                <li  class="list-group-item" *ngFor="let country of this.topCountriesData">
                                     <div class="row align-items-center no-gutters">
                                         <div class="col mr-2">
-                                            <h6 class="mb-0"><strong>Country Name</strong></h6><span class="text-xs">% Based On Total Population: 89%</span></div>
-                                        <div class="col-auto"><span style="margin-right: 10px;">Text</span><i class="fa fa-star"></i></div>
+                                            <h6 class="mb-0"><strong>{{country.country}}</strong></h6><span class="text-xs">{{country.description}}: {{country.percentage}}%</span></div>
+                                        <div class="col-auto"><span style="margin-right: 10px;">{{country.total}}</span><i class="fa fa-star"></i></div>
                                     </div>
                                 </li>
-                                <li class="list-group-item">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col mr-2">
-                                            <h6 class="mb-0"><strong>Country Name</strong></h6><span class="text-xs">% Based On Total Population: 89%</span></div>
-                                        <div class="col-auto"><span style="margin-right: 10px;">Text</span><i class="fa fa-star"></i></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col mr-2">
-                                            <h6 class="mb-0"><strong>Country Name</strong></h6><span class="text-xs">% Based On Total Population: 89%</span></div>
-                                        <div class="col-auto"><span style="margin-right: 10px;">Text</span><i class="fa fa-star"></i></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col mr-2">
-                                            <h6 class="mb-0"><strong>Country Name</strong></h6><span class="text-xs">% Based On Total Population: 89%</span></div>
-                                        <div class="col-auto"><span style="margin-right: 10px;">Text</span><i class="fa fa-star"></i></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col mr-2">
-                                            <h6 class="mb-0"><strong>Country Name</strong></h6><span class="text-xs">% Based On Total Population: 89%</span></div>
-                                        <div class="col-auto"><span style="margin-right: 10px;">Text</span><i class="fa fa-star"></i></div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="row align-items-center no-gutters">
-                                        <div class="col mr-2">
-                                            <h6 class="mb-0"><strong>Country Name</strong></h6><span class="text-xs">% Based On Total Population: 89%</span></div>
-                                        <div class="col-auto"><span style="margin-right: 10px;">Text</span><i class="fa fa-star"></i></div>
-                                    </div>
-                                </li>
+                            </div>
+
+
                             </ul>
                         </div>
                     </div>

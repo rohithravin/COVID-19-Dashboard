@@ -22,6 +22,7 @@ router.post('/getWorldPlot', (req,res) => {
 
 router.post('/getTopCountriesData', (req,res) => {
     const data = JSON.parse(req.body['data'])
+    console.log(data)
     console.log(`world-dashboard.py --updateTopCountriesData [INFO]: Start.`);
     const subprocess =  spawn('python', ["-u", './scripts/world-dashboard.py','--updateTopCountriesData' , data['plotTraceId'], data['numLimit'] ]);
     // print output of script

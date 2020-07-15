@@ -83,14 +83,16 @@ def updateWorldStats(traceId, limit_num):
         sql_stm_total = "SELECT location, population as total FROM corona.world_location WHERE location IN ({})".format("'" + '\',\''.join(countries) + "'")
         df_total = pd.read_sql(sql_stm_total, con = cnx)
         description = '% Based On Total Population'
-    top_countries_data = {}
+    top_countries_data = []
     for index, row in df_stats.iterrows():
-        top_countries_data[row['location']] = {
+        top_countries_data.append( {
             'country': row['location'],
             'total':row[trace],
             'description':description ,
-            'percentage': round((( row[trace] / int(df_total.loc[df_total['location'] == row['location']]['total']))* 100) , 2) }
-    print(json.dumps({'Top Countries Data': top_countries_data}))
+            'percentage': round((( row[trace] / int(df_total.loc[df_total['location'] == row['location']]['total']))* 100) , 2) } )
+    output = {}
+    output['topCountriesData'] = top_countries_data
+    print(json.dumps({'Top Countries Data': output}))
 
 worlTotalPlotInfo = {
                     1100: 'new_cases',
