@@ -5,8 +5,7 @@ import pandas as pd
 import config
 
 cnx = mysql.connector.connect(user = config.MYSQL_USERNAME, password = config.MYSQL_PASSWORD,
-                                host = config.MYSQL_HOST, allow_local_infile=True,
-                                database = config.MYSQL_DB )
+                                host = config.MYSQL_HOST, allow_local_infile=True)
 cursor = cnx.cursor()
 
 TABLES = {}
@@ -116,7 +115,7 @@ except mysql.connector.Error as err:
     if err.errno == errorcode.ER_BAD_DB_ERROR:
         create_database(cursor)
         print("Database {} created successfully.".format(config.MYSQL_DB))
-        cnx.database = os.environ.get("MYSQL_DB")
+        cnx.database = config.MYSQL_DB
     else:
         print(err)
         exit(1)

@@ -145,8 +145,6 @@ def updateTotalPlot(kindId, traceId, county):
         showlegend=False
     )
     closeConnection(cnx)
-    username = 'rohithravin1' # your username
-    api_key = 'cR8BpQTG0bLpjJdLURX5' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
     fig_url = py.plot(fig, filename = 'mixed_plot', auto_open=False)
     html = tls.get_embed(fig_url)
@@ -198,8 +196,6 @@ def updateGroupsKindPlot(kindId,traceId,timelineId):
             pad=4
         )
     )
-    username = 'rohithravin1' # your username
-    api_key = 'cR8BpQTG0bLpjJdLURX5' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
     fig_url = py.plot(fig, filename = 'total_case_death_plot', auto_open=False)
     html = tls.get_embed(fig_url)
@@ -297,8 +293,6 @@ def newKindPlot(kindId, traceId, timeline, county):
         )
     )
     closeConnection(cnx)
-    username = 'rohithravin1' # your username
-    api_key = 'cR8BpQTG0bLpjJdLURX5' # your api key - go to profile > settings > regenerate key
     chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
     fig_url = py.plot(fig, filename = 'new_case_death_plot', auto_open=False)
     html = tls.get_embed(fig_url)

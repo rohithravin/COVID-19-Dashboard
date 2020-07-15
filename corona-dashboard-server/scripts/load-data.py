@@ -10,15 +10,14 @@ cnx = mysql.connector.connect(user = config.MYSQL_USERNAME, password = config.MY
 cursor = cnx.cursor()
 
 for key in config.DATA_URLS.keys():
+    print("Getting {} data from URL.".format(key))
     data = pd.read_csv(config.DATA_URLS[key])
     if key in ['world_location', 'world_data']:
         data = data.fillna(0)
     else:
         data = data.dropna()
-
     mysql_data = [tuple(x) for x in data.values.tolist()]
-
-    print("Clearing {} data: ".format(key), end="")
+    print("Clearing {} data from db: ".format(key), end="")
     try:
         sql_stm = "TRUNCATE TABLE {}".format(key)
         cursor.execute(sql_stm)
@@ -28,7 +27,7 @@ for key in config.DATA_URLS.keys():
         print("OK")
     cnx.commit()
 
-    print("Loading {} data: ".format(key), end="")
+    print("Loading {} data from db: ".format(key), end="")
     sql_stm = 'INSERT INTO {} ( '.format(key) 
     for x in range(len(data.columns)):
         if x == len(data.columns) - 1:
