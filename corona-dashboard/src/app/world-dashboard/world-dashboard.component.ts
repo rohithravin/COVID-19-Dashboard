@@ -30,7 +30,21 @@ export class WorldDashboardComponent implements OnInit {
   worldPlotLink:SafeResourceUrl;
   worldPlotTimeline: plotTimelineButton[];
 
+  topCountriesTraceDropdown: plotDropDowns[];
+  topCountriesTraceDropdownSelected: plotDropDowns;
+
   constructor(private _apiService: CoronaDashboardApiService, private _snackBar: MatSnackBar, public _sanitizer: DomSanitizer) {
+
+    this.topCountriesTraceDropdown = [
+      {id: 2100, name: 'New Cases (Today)'},
+      {id: 2200, name: 'New Cases'},
+      {id: 2500, name: 'New Deaths (Today)'},
+      {id: 2600, name: 'New Deaths'},
+      {id: 2300, name: 'Total Deaths'},
+      {id: 2400, name: 'Total Cases'}
+    ]
+    this.topCountriesTraceDropdownSelected = this.topCountriesTraceDropdown[0];
+
 
     this.worldPlotTraceDropdown = [
       {id: 1100, name: 'New Cases'},
