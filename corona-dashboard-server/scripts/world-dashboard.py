@@ -45,7 +45,52 @@ def openConnection():
 def closeConnection(cnx):
     cnx.close()
 
+# ----------------------------- #
+#
+#       TOP COUNTRIES STATS     #
+#
+# ----------------------------- #
+worldStats = {
+    2100: 'new_cases',
+    2200: 'new_cases',
+    2500: 'new_deaths',
+    2600: 'new_deaths',
+    2300: 'total_cases',
+    2400: 'total_deaths'
+}
 
+def updateWorldStats(traceId, limit_num):
+    cnx = openConnection()
+    trace = worldStats[traceId]
+    time_diff = 0
+    if traceId in [2100,2500]:
+        time_diff = 1
+    sql_stm = "SELECT date , location, {}  FROM corona.world_data WHERE date = curdate() - {} AND location != 'World' ORDER BY {} DESC LIMIT {}".format(trace, time_diff, trace, limit_num) 
+    df_stats = pd.read_sql(sql_stm, con = cnx)
+    countries = list(df_stats['location'].unique())
+    sql_stm_total = ''
+    df_total = None
+    description = ''
+    if traceId in [2100,2200]:
+        sql_stm_total = "SELECT location, total_cases as total FROM corona.world_data WHERE date = curdate() AND location IN ({})".format("'" + '\',\''.join(countries) + "'")
+        df_total = pd.read_sql(sql_stm_total, con = cnx)
+        description = '% Based On Total {}'.format(trace[trace.index('_')+1:].capitalize())
+    elif traceId in [2500,2600]:
+        sql_stm_total = "SELECT location, total_deaths as total FROM corona.world_data WHERE date = curdate() AND location IN ({})".format("'" + '\',\''.join(countries) + "'")
+        df_total = pd.read_sql(sql_stm_total, con = cnx)
+        description = '% Based On Total {}'.format(trace[trace.index('_')+1:].capitalize())
+    elif traceId in [2300,2400]:
+        sql_stm_total = "SELECT location, population as total FROM corona.world_location WHERE location IN ({})".format("'" + '\',\''.join(countries) + "'")
+        df_total = pd.read_sql(sql_stm_total, con = cnx)
+        description = '% Based On Total Population'
+    top_countries_data = {}
+    for index, row in df_stats.iterrows():
+        top_countries_data[row['location']] = {
+            'country': row['location'],
+            'total':row[trace],
+            'description':description ,
+            'percentage': round((( row[trace] / int(df_total.loc[df_total['location'] == row['location']]['total']))* 100) , 2) }
+    print(json.dumps({'Top Countries Data': top_countries_data}))
 
 worlTotalPlotInfo = {
                     1100: 'new_cases',
@@ -63,13 +108,13 @@ def updateTotalPlot(traceId, timelineId):
     trace = worlTotalPlotInfo[traceId]
     timeline = plotTimeLine[timelineId]
     cnx = openConnection()
-    sql_stm = "SELECT date, SUM({}) as {} FROM corona.world_data GROUP BY date ORDER BY date desc".format(trace, trace)
+    sql_stm = "SELECT date , {}  FROM corona.world_data  WHERE location = 'World' ORDER BY date desc".format(trace)
     df = pd.read_sql(sql_stm, con = cnx)
     df_sub = df.sort_values(by='date', ascending=False)
     if timeline != None:
             df_sub = df_sub.head(timeline)
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[trace], mode='lines+markers', name=trace))
+    fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[trace], mode='lines+markers', name=trace, fill='tozeroy'))
     fig.update_layout(
         xaxis_title="Date",
         yaxis_title="# of People",
@@ -116,4 +161,17 @@ elif sys.argv[1] == '--updateWorldPlot':
         print("traceId argument not a valid id.", file=sys.stderr)
         exit(6)
     updateTotalPlot(traceId, timelineId)
-    
+elif sys.argv[1] == '--updateTopCountriesData':
+    if len(sys.argv) < 4:
+        print("Invalid argument list. python cali-dashboard.py [method-flag] [traceId] [numLimit]", file=sys.stderr)
+        exit(1)
+    try:
+        traceId = int(sys.argv[2])
+        numLimit = int(sys.argv[3])
+    except Exception as err:
+        print("Argument not a number.", file=sys.stderr)
+        exit(2)
+    if traceId not in [2100,2200,2300,2400,2500,2600]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(5)
+    updateWorldStats(traceId, numLimit)
