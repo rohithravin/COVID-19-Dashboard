@@ -42,8 +42,28 @@ export class WorldDashboardComponent implements OnInit {
   topCountriesData: topCountryData[];
   showTopCountriesData:boolean;
 
+  topCountriesTracePlotDropdown: plotDropDowns[];
+  topCountriesTracePlotDropdownSelected: plotDropDowns;
+  showTopCountriesPlot:boolean;
+  topCountriesPlotTimeline: plotTimelineButton[];
+  topCountriesPlotLink: SafeResourceUrl;
+
   constructor(private _apiService: CoronaDashboardApiService, private _snackBar: MatSnackBar, public _sanitizer: DomSanitizer) {
 
+    this.topCountriesTracePlotDropdown = [
+      {id: 7100, name: 'New Cases'},
+      {id: 7200, name: 'New Death'},
+      {id: 7300, name: 'Total Cases'},
+      {id: 7400, name: 'Total Deaths'},
+    ]
+    this.topCountriesTracePlotDropdownSelected = this.topCountriesTracePlotDropdown[0];
+    this.showTopCountriesPlot = false;
+    this.topCountriesPlotTimeline = [
+      {id: 501, name: '2 Weeks', selected: true},
+      {id: 502, name: 'Month', selected: false},
+      {id: 503, name: '3 Months', selected: false},
+      {id: 504, name: 'All', selected: false},
+    ]
 
     this.topCountriesData = [];
     this.topCountriesTraceDropdown = [
@@ -74,7 +94,9 @@ export class WorldDashboardComponent implements OnInit {
     ]
 
     this.updateWorldPlot(this.worldPlotTraceDropdownSelected,this.worldPlotTimeline)
+    this.updateTopCountriesPlot(this.topCountriesTracePlotDropdownSelected, this.topCountriesPlotTimeline)
     this.updateTopCountriesData(this.topCountriesTraceDropdownSelected);
+
    }
 
   ngOnInit(): void {
@@ -84,7 +106,7 @@ export class WorldDashboardComponent implements OnInit {
   updateTopCountriesData(traceKind:plotDropDowns){
     this.showTopCountriesData = false;
     this.topCountriesData = []
-    var err = this._apiService.getTopCountriesData({'plotTraceId': traceKind.id, 'numLimit': 7 });
+    var err = this._apiService.getTopCountriesData({'plotTraceId': traceKind.id, 'numLimit': 8 });
     err.subscribe( data => { 
       if (data['sucess'] == 501){
           this._snackBar.open('[ERROR]: Server error. Please try again later.', 'Close', {
@@ -107,8 +129,6 @@ export class WorldDashboardComponent implements OnInit {
           this.showTopCountriesData = true;
           
         }
-
-        
       }
       else {
         this._snackBar.open( 'ERROR: Server not responding. Try again later.', 'Close', {
@@ -137,7 +157,46 @@ export class WorldDashboardComponent implements OnInit {
       if (typePlot == 'world'){
         this.updateWorldPlot(plotKindTrace, buttonList)
       }
+      if (typePlot == 'topCountries'){
+        this.updateTopCountriesPlot(plotKindTrace, buttonList)
+      }
     }
+  }
+
+  updateTopCountriesPlot(plotKindTrace: plotDropDowns, plotTimeline:plotTimelineButton[]){
+
+    this.showTopCountriesPlot = false;
+    var updatedPlotTimeline = -1;
+    for (let x in plotTimeline){
+      if (plotTimeline[x]['selected'] == true ){
+          updatedPlotTimeline = plotTimeline[x]['id']
+      }
+    }
+
+    var err = this._apiService.getTopCountriesPlot({'plotTraceId': plotKindTrace.id, 'plotTimeline': updatedPlotTimeline, 'numLimit': 8 });
+    err.subscribe( data => { 
+      console.log(data)
+      if (data['sucess'] == 501){
+          this._snackBar.open('[ERROR]: Server error. Please try again later.', 'Close', {
+            panelClass: 'snack-bar',
+            duration: 2500
+          });
+          this.showTopCountriesPlot = false;
+      }
+      else if (data['sucess'] == 100){
+        console.log(data['data']['Plot Link'])
+        this.topCountriesPlotLink = this._sanitizer.bypassSecurityTrustResourceUrl(data['data']['Plot Link']);
+        this.showTopCountriesPlot = true;
+      }
+      else {
+        this._snackBar.open( 'ERROR: Server not responding. Try again later.', 'Close', {
+          panelClass: 'snack-bar',
+          duration: 2500
+        });
+        this.showTopCountriesPlot = false;
+      }
+    });
+
   }
 
   updateWorldPlot(plotKindTrace: plotDropDowns, plotTimeline:plotTimelineButton[]){

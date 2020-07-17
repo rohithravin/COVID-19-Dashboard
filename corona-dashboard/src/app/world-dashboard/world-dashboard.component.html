@@ -76,18 +76,30 @@
                     </div>
                     <div class="col-lg-7 col-xl-8">
                         <div class="card shadow mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                            <div style="height:55px;" class="card-header d-flex justify-content-between align-items-center">
+                                
                                 <h6 class="text-primary font-weight-bold m-0">Top Countries</h6>
-                                <div class="dropdown"><button class="btn btn-light btn-sm dropdown-toggle text-right border rounded border-light" data-toggle="dropdown" aria-expanded="false" type="button">Dropdown </button>
-                                    <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="#">First Item</a><a class="dropdown-item" role="presentation" href="#">Second Item</a><a class="dropdown-item" role="presentation" href="#">Third Item</a></div>
-                                </div>
+                                <select  [(ngModel)]="this.topCountriesTracePlotDropdownSelected"  (change)="this.updateTopCountriesPlot(this.topCountriesTracePlotDropdownSelected,this.topCountriesPlotTimeline)" style="font-size:15px; background: #f8f9fc; border:0px; outline:0px;">
+                                    <option *ngFor="let kind of this.topCountriesTracePlotDropdown" [ngValue]="kind"> {{kind.name}} </option>
+                                </select>
                             </div>
-                            <div class="card-body" style="height: 480px;">
+                            <div class="card-body">
                                 
+                                <div *ngIf="this.showTopCountriesPlot == false" class="row" style="height: 510px;">
+                                    <div class="col text-center align-self-center">
+                                        <h1>Loading Visuals...</h1>
+                                    </div>
+                                </div>
                                 
-                                <iframe  id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~corona_dashboard/43.embed?showlink=false&modebar=false&autosize=true" height="450" width="100%"></iframe>
+                                <iframe *ngIf="this.showTopCountriesPlot == true"  id="igraph" scrolling="no" style="border:none;" seamless="seamless" [src]="this.topCountriesPlotLink" height="460" width="100%"></iframe>
                                 
-                                
+                                <div *ngIf="this.showTopCountriesPlot == true" class="row" style="margin-top: 10px;">
+                                    <div class="col text-center" *ngFor="let button of this.topCountriesPlotTimeline"> 
+                                        <div class="col text-center">
+                                            <button  [ngClass]="button.selected ? 'btn btn-light text-info border rounded border-white' : 'btn text-muted border rounded border-white' "  (click)="updateButtonSelected('topCountries',button.id, this.topCountriesPlotTimeline,this.topCountriesTracePlotDropdownSelected)"  type="button"  >{{button.name}}</button>
+                                        </div>
+                                    </div>
+                                </div>
                             
                             
                             </div>

@@ -47,6 +47,56 @@ def closeConnection(cnx):
 
 # ----------------------------- #
 #
+#       TOP COUNTRIES PLOT     #
+#
+# ----------------------------- #
+worldStatsPlot = {
+    7100: 'new_cases', # today
+    7200: 'new_deaths', # today
+    7300: 'total_cases',
+    7400: 'total_deaths'
+}
+
+def getTopCountries(traceId, limit):
+    cnx = openConnection()
+    trace = worldStatsPlot[traceId]
+    sql_stm = ("SELECT date,location, {} " 
+        "FROM corona.world_data "
+        "WHERE location != 'World' AND date = CURDATE()"
+        "ORDER BY {} DESC LIMIT {}".format(trace,trace,limit))
+    df = pd.read_sql(sql_stm, con = cnx)
+    return list(df['location'])
+
+def updateTopCountriesPlot(traceId, timelineId,limit):
+    cnx = openConnection()
+    trace = worldStatsPlot[traceId]
+    timeline = plotTimeLine[timelineId]
+    top_countries = getTopCountries(traceId, limit)
+    fig = go.Figure()
+    sql_stm = "SELECT date, location, {} FROM corona.world_data WHERE location IN ({})".format(trace,"'" + '\',\''.join(top_countries) + "'")
+    df = pd.read_sql(sql_stm, con = cnx)
+    for country in list(df['location'].unique()):
+        df_sub = df.loc[df['location'] == country].sort_values(by='date', ascending=False)            
+        if timeline != None:
+            df_sub = df_sub.head(timeline)
+        fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[trace], mode='lines+markers', name=country))
+    fig.update_layout(
+        margin=dict(
+            l=50,
+            r=50,
+            b=0,
+            t=0,
+            pad=4
+        )
+    )
+    chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
+    fig_url = py.plot(fig, filename = 'total_case_death_plot', auto_open=False)
+    html = tls.get_embed(fig_url)
+    final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
+    print(json.dumps({'Plot Link': final_html_link}))
+
+# ----------------------------- #
+#
 #       TOP COUNTRIES STATS     #
 #
 # ----------------------------- #
@@ -63,7 +113,7 @@ def updateWorldStats(traceId, limit_num):
     cnx = openConnection()
     trace = worldStats[traceId]
     time_diff = 0
-    if traceId in [2100,2500]:
+    if traceId in [2200,2600]:
         time_diff = 1
     sql_stm = "SELECT date , location, {}  FROM corona.world_data WHERE date = curdate() - {} AND location != 'World' ORDER BY {} DESC LIMIT {}".format(trace, time_diff, trace, limit_num) 
     df_stats = pd.read_sql(sql_stm, con = cnx)
@@ -177,3 +227,21 @@ elif sys.argv[1] == '--updateTopCountriesData':
         print("traceId argument not a valid id.", file=sys.stderr)
         exit(5)
     updateWorldStats(traceId, numLimit)
+elif sys.argv[1] == '--updateTopCountriesPlot':
+    if len(sys.argv) < 5:
+        print("Invalid argument list. python cali-dashboard.py [method-flag] [traceId] [timelineId] [numLimit]", file=sys.stderr)
+        exit(1)
+    try:
+        traceId = int(sys.argv[2])
+        timelineId = int(sys.argv[3])
+        numLimit = int(sys.argv[4])
+    except Exception as err:
+        print("Argument not a number.", file=sys.stderr)
+        exit(2)
+    if traceId not in [7100,7200,7300,7400]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(5)
+    if timelineId not in [501,502,503,504]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(6)
+    updateTopCountriesPlot(traceId, timelineId, numLimit)
