@@ -21,5 +21,8 @@ DATA_URLS = {
                 'cali_testing' : "https://data.ca.gov/dataset/efd6b822-7312-477c-922b-bccb82025fbe/resource/b6648a0d-ff0a-4111-b80b-febda2ac9e09/download/statewide_testing.csv"
             }
 
-PLOTLY_USERNAME =  'rohithravin'
-PLOTLY_API_KEY =  'o4x1xVbQ54P09SaiQHu8'
+# PLOTLY_USERNAME =  'rohithravin'
+# PLOTLY_API_KEY =  'o4x1xVbQ54P09SaiQHu8'
+
+PLOTLY_USERNAME = 'corona_dashboard'
+PLOTLY_API_KEY = 'O2OxLYXntLMqm2Ll0AtO'

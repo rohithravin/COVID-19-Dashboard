@@ -44,3 +44,15 @@ npm install
 ng serve --open=true
 ```
 
+> ## California Dashboard
+> This dashboard is specific to the state of California. Based on your zipcode, the corresponding data will be curated to visualized for you to view. You can also different visualizations of the state data as well. Below is the youtube video demo showcasing the dashboard.
+
+
+[![California Dashboard](http://img.youtube.com/vi/zRc0mbsVl8Y/0.jpg)](http://www.youtube.com/watch?v=zRc0mbsVl8Y "California Dashboard")
+
+> ## World Dashboard
+> This dashboard is specific to the world. Data is currated so you can see the top countries affected and toggle through the plots. You can also search specfic countries to view data specific to that country.
+
+[![World Dashboard](http://img.youtube.com/vi/J1ynNYSbHQs/0.jpg)](http://www.youtube.com/watch?v=J1ynNYSbHQs "World Dashboard")
+
+

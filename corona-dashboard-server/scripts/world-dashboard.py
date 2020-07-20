@@ -14,8 +14,8 @@ import chart_studio.plotly as py
 import chart_studio.tools as tls
 import chart_studio
 
-PLOTLY_USERNAME = 'corona_dashboard'
-PLOTLY_API_KEY = 'O2OxLYXntLMqm2Ll0AtO'
+PLOTLY_USERNAME = config.PLOTLY_USERNAME
+PLOTLY_API_KEY = config.PLOTLY_API_KEY
 
 plotTimeLine = {
     501: 14,
@@ -79,7 +79,7 @@ def getCountryPlot(country, traceId, timelineId, output_type):
         )
     )
     chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
-    fig_url = py.plot(fig, filename = 'country_plot', auto_open=False)
+    fig_url = py.plot(fig,  auto_open=False)
     html = tls.get_embed(fig_url)
     final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
     if output_type == 'return':
@@ -200,7 +200,7 @@ def updateTopCountriesPlot(traceId, timelineId,limit):
         )
     )
     chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
-    fig_url = py.plot(fig, filename = 'total_case_death_plot', auto_open=False)
+    fig_url = py.plot(fig,  auto_open=False)
     html = tls.get_embed(fig_url)
     final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
     print(json.dumps({'Plot Link': final_html_link}))
@@ -291,7 +291,7 @@ def updateTotalPlot(traceId, timelineId):
     )
     closeConnection(cnx)
     chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
-    fig_url = py.plot(fig, filename='totalWorldPlot', auto_open=False)
+    fig_url = py.plot(fig,  auto_open=False)
     html = tls.get_embed(fig_url)
     final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
     print(json.dumps({'Plot Link': final_html_link}))
