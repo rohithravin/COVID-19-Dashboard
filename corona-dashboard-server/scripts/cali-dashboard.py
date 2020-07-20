@@ -282,8 +282,8 @@ def newKindPlot(kindId, traceId, timeline, county):
                 df_sub = df_sub.head(kind_timeline)
         fig.add_trace(go.Scatter(x=df_sub['date'], y=df_sub[kind_type[1]], mode='lines+markers', name='California'))
     fig.update_layout(
-         xaxis_title="# of People",
-        yaxis_title="Date",
+         xaxis_title="Date",
+        yaxis_title="# of People",
         margin=dict(
             l=50,
             r=50,

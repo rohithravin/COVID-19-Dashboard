@@ -58,4 +58,42 @@ router.post('/getTopCountriesPlots', (req,res) => {
     });
 })
 
+router.post('/getCountryData', (req,res) => {
+    const data = JSON.parse(req.body['data'])
+    console.log(data)
+    console.log(`world-dashboard.py --getCountryData [INFO]: Start.`);
+    const subprocess =  spawn('python', ["-u", './scripts/world-dashboard.py','--getCountryData', data['traceId'],data['timelineId'],data['country']]);
+    // print output of script
+    subprocess.stdout.on('data', (data) => {
+        console.log(`world-dashboard.py --getCountryData [INFO]:${data}`);
+        res.send({sucess:100, msg: 'Success.', data:JSON.parse(data.toString().trim())});
+    });
+    subprocess.stderr.on('data', (data) => {
+        console.log(`world-dashboard.py --getCountryData [ERROR]:${data}`);
+        res.send({sucess:501, msg:data.toString().trim()});
+    });
+    subprocess.on('close', () => {
+        console.log("world-dashboard.py --getCountryData [INFO]: Closed.");
+    });
+})
+
+router.post('/getCountryPlot', (req,res) => {
+    const data = JSON.parse(req.body['data'])
+    console.log(data)
+    console.log(`world-dashboard.py --getCountryPlot [INFO]: Start.`);
+    const subprocess =  spawn('python', ["-u", './scripts/world-dashboard.py','--getCountryPlot', data['traceId'],data['timelineId'], 'print' ,data['country']]);
+    // print output of script
+    subprocess.stdout.on('data', (data) => {
+        console.log(`world-dashboard.py --getCountryPlot [INFO]:${data}`);
+        res.send({sucess:100, msg: 'Success.', data:JSON.parse(data.toString().trim())});
+    });
+    subprocess.stderr.on('data', (data) => {
+        console.log(`world-dashboard.py --getCountryPlot [ERROR]:${data}`);
+        res.send({sucess:501, msg:data.toString().trim()});
+    });
+    subprocess.on('close', () => {
+        console.log("world-dashboard.py --getCountryPlot [INFO]: Closed.");
+    });
+})
+
 module.exports = router;

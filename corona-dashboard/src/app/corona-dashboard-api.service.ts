@@ -52,6 +52,16 @@ export class CoronaDashboardApiService {
     return this._httpClient.post('http://localhost:3000/world/getTopCountriesPlots', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
   }
 
+  getCountryData(data){
+    const payload  = JSON.stringify(data);
+    return this._httpClient.post('http://localhost:3000/world/getCountryData', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
+  }
+
+  getCountryPlot(data){
+    const payload  = JSON.stringify(data);
+    return this._httpClient.post('http://localhost:3000/world/getCountryPlot', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
+  }
+
   getWorldPlot(data){
     const payload  = JSON.stringify(data);
     return this._httpClient.post('http://localhost:3000/world/getWorldPlot', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
