@@ -45,9 +45,119 @@ def openConnection():
 def closeConnection(cnx):
     cnx.close()
 
+
 # ----------------------------- #
 #
-#       TOP COUNTRIES PLOT     #
+#         COUNTRY PLOT          #
+#
+# ----------------------------- #
+
+countryPlot = {
+    9100: 'new_cases', # today
+    9200: 'new_deaths', # today
+    9300: 'total_cases',
+    9400: 'total_deaths'
+}
+
+def getCountryPlot(country, traceId, timelineId, output_type):
+    cnx = openConnection()
+    trace = countryPlot[traceId]
+    timeline = plotTimeLine[timelineId]
+    sql_stm = 'SELECT date, {} FROM corona.world_data WHERE location = "{}" ORDER BY date DESC'.format(trace,country)
+    df = pd.read_sql(sql_stm, con = cnx)
+    if timeline != None:
+        df = df.head(timeline)
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=df['date'], y=df[trace], mode='lines+markers'))
+    fig.update_layout(
+        margin=dict(
+            l=50,
+            r=50,
+            b=0,
+            t=0,
+            pad=4
+        )
+    )
+    chart_studio.tools.set_credentials_file(username=PLOTLY_USERNAME, api_key=PLOTLY_API_KEY)
+    fig_url = py.plot(fig, filename = 'country_plot', auto_open=False)
+    html = tls.get_embed(fig_url)
+    final_html_link = html[html.index('https'):html.index('embed')+5] + '?showlink=false&modebar=false&autosize=true'
+    if output_type == 'return':
+        return final_html_link
+    elif output_type == 'print':
+        print(json.dumps({'Plot Link': final_html_link}))
+
+# ----------------------------- #
+#
+#          COUNTRY DATA         #
+#
+# ----------------------------- #
+def getCountryData(country,traceId,timelineId):
+    cnx = openConnection()
+    sql_stm = 'SELECT DISTINCT(location) FROM corona.world_data'
+    df = pd.read_sql(sql_stm, con = cnx)
+    countries = list(df['location'])
+    country = country.strip().lower()
+    if country not in [x.lower() for x in countries]:
+        print(json.dumps({'message': 'country doesn\'t exist.', 'python_code':501}))
+    else:
+        country = country.title()
+        # New Cases
+        sql_stm = "SELECT date,new_cases FROM corona.world_data WHERE location = '{}' AND date != CURDATE() ORDER BY date DESC LIMIT 2".format(country)
+        df = pd.read_sql(sql_stm, con = cnx)
+        new_cases = list(df['new_cases'])
+        new_cases_data = {}
+        new_cases_data['data'] = new_cases[0]
+        new_cases_data['data_percentage'] = round((( abs(new_cases[0] - new_cases[1]) /  new_cases[1] ) * 100),2)
+        if new_cases[0] >= new_cases[1]:
+            new_cases_data['direction'] = 'increase'
+        else:
+            new_cases_data['direction'] = 'decrease'
+        new_cases_data['title'] = 'New Cases'
+        # New Deaths
+        sql_stm = "SELECT date,location,new_deaths FROM corona.world_data WHERE location = '{}' AND date != CURDATE() ORDER BY date DESC LIMIT 2".format(country)
+        df = pd.read_sql(sql_stm, con = cnx)
+        new_deaths = list(df['new_deaths'])
+        new_deaths_data = {}
+        new_deaths_data['data'] = new_deaths[0]
+        new_deaths_data['data_percentage'] = round((( abs(new_deaths[0] - new_deaths[1]) /  new_deaths[1] ) * 100),2)
+        if new_deaths[0] >= new_deaths[1]:
+            new_deaths_data['direction'] = 'increase'
+        else:
+            new_deaths_data['direction'] = 'decrease'
+        new_deaths_data['title'] = 'New Deaths'
+        # Total Cases
+        sql_stm = "SELECT date,location,total_cases FROM corona.world_data WHERE location = '{}' AND date != CURDATE() ORDER BY date DESC LIMIT 2".format(country)
+        df = pd.read_sql(sql_stm, con = cnx)
+        total_cases = list(df['total_cases'])
+        total_cases_data = {}
+        total_cases_data['data'] = total_cases[0]
+        total_cases_data['data_percentage'] = round((( abs(total_cases[0] - total_cases[1]) /  total_cases[1] ) * 100),2)
+        if total_cases[0] >= total_cases[1]:
+            total_cases_data['direction'] = 'increase'
+        else:
+            total_cases_data['direction'] = 'decrease'
+        total_cases_data['title'] = 'Total Cases'
+        # Total Deaths
+        sql_stm = "SELECT date,location,total_deaths FROM corona.world_data WHERE location = '{}' AND date != CURDATE() ORDER BY date DESC LIMIT 2".format(country)
+        df = pd.read_sql(sql_stm, con = cnx)
+        total_deaths = list(df['total_deaths'])
+        total_deaths_data = {}
+        total_deaths_data['data'] = total_deaths[0]
+        total_deaths_data['data_percentage'] = round((( abs(total_deaths[0] - total_deaths[1]) /  total_deaths[1] ) * 100),2)
+        if total_deaths[0] >= total_deaths[1]:
+            total_deaths_data['direction'] = 'increase'
+        else:
+            total_deaths_data['direction'] = 'decrease'
+        total_deaths_data['title'] = 'Total Deaths'
+        country_data = [new_cases_data, new_deaths_data, total_cases_data, total_deaths_data]
+        fig_link = getCountryPlot (country, traceId,timelineId,'return')
+        print(json.dumps({'country_data': country_data, 'python_code':100, 'country':country, 'plot_link': fig_link }))
+    
+
+# ----------------------------- #
+#
+#       TOP COUNTRIES PLOT      #
 #
 # ----------------------------- #
 worldStatsPlot = {
@@ -245,3 +355,39 @@ elif sys.argv[1] == '--updateTopCountriesPlot':
         print("traceId argument not a valid id.", file=sys.stderr)
         exit(6)
     updateTopCountriesPlot(traceId, timelineId, numLimit)
+elif sys.argv[1] == '--getCountryData':
+    if len(sys.argv) < 4:
+        print("Invalid argument list. python cali-dashboard.py [method-flag] [traceId] [timelineId] [country]", file=sys.stderr)
+        exit(1)
+    try:
+        traceId = int(sys.argv[2])
+        timelineId = int(sys.argv[3])
+    except Exception as err:
+        print("Argument not a number.", file=sys.stderr)
+        exit(2)
+    country_input = ' '.join(list(sys.argv)[4:])
+    if traceId not in [9100,9200,9300,9400]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(5)
+    if timelineId not in [501,502,503,504]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(6)
+    getCountryData(country_input,traceId,timelineId)
+elif sys.argv[1] == '--getCountryPlot':
+    if len(sys.argv) < 5:
+        print("Invalid argument list. python cali-dashboard.py [method-flag] [traceId] [timelineId] [output_type] [country]", file=sys.stderr)
+        exit(1)
+    try:
+        traceId = int(sys.argv[2])
+        timelineId = int(sys.argv[3])
+    except Exception as err:
+        print("Argument not a number.", file=sys.stderr)
+        exit(2)
+    country_input = ' '.join(list(sys.argv)[5:])
+    if traceId not in [9100,9200,9300,9400]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(5)
+    if timelineId not in [501,502,503,504]:
+        print("traceId argument not a valid id.", file=sys.stderr)
+        exit(6)
+    getCountryPlot(country_input,traceId,timelineId, 'print')

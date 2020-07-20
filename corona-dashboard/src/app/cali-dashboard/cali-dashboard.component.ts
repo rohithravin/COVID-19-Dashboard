@@ -135,6 +135,8 @@ export class CaliDashboardComponent implements OnInit {
     
    }
 
+  
+
   updateButtonSelected(typePlot:string, buttonId:number, buttonList:plotTimelineButton[], plotKind: plotDropDowns, plotKindTrace: plotDropDowns){
     var updatePlotFlag = false;
     

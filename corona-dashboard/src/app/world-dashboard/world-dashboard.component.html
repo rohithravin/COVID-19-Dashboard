@@ -113,159 +113,70 @@
                                 <div class="col">
                                     <div class="row">
                                         <div class="col text-left align-self-center">
-                                            <h6 class="text-primary font-weight-bold m-0">United States</h6>
+                                            <h6 class="text-primary font-weight-bold m-0">{{this.countryName}}</h6>
                                         </div>
                                         <div class="col text-right">
-                                            <form class="d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                                                <div class="input-group"><input class="bg-white form-control border-0 small" type="text" placeholder="Search For Country...">
-                                                    <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
+                                            <div class="d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                                                <div class="input-group"><input [(ngModel)]="this.userInputCountry" required class="bg-white form-control border-0 small" type="text" placeholder="Search For Country...">
+                                                    <div class="input-group-append"><button (click)="this.getCountryData(this.userInputCountry)" class="btn btn-primary py-0" type="button">  <fa-icon [icon]="fa_Search" style="font-size: 15px;margin-right: 5px; color: white;"></fa-icon>  </button></div>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body" style="height: 650px;">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="row">
-                                            <div class="col-lg-6 mb-4">
-                                                <div class="card text-danger border-danger shadow">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="m-0">Primary</p>
-                                                                <p class="text-danger small m-0">#4e73df</p>
-                                                            </div>
-                                                            <div class="col text-right align-self-center"><i class="fa fa-star"></i></div>
-                                                        </div>
+                                <div class="row" style="padding-bottom:15px;">
+
+                                    <div *ngFor="let data of this.countryData" class="col">
+
+                                        <div  [ngClass]="(data.direction=='decrease')?'card border-success shadow  py-2':'card border-danger shadow  py-2'"  >
+                                            <div class="card-body">
+                                                <div class="row align-items-center no-gutters">
+                                                    <div class="col mr-2">
+                                                        <div  [ngClass]="(data.direction=='decrease')?'text-uppercase text-success font-weight-bold text-xs mb-1':'text-uppercase text-danger font-weight-bold text-xs mb-1'" ><span>{{data.title}}</span></div>
+                                                        <div class="text-dark font-weight-bold h5 mb-0"><span>{{data.data}}</span></div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 mb-4">
-                                                <div class="card text-success border-success shadow">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="m-0">Primary</p>
-                                                                <p class="text-success small m-0">#4e73df</p>
-                                                            </div>
-                                                            <div class="col text-right align-self-center"><i class="fa fa-star"></i></div>
-                                                        </div>
-                                                    </div>
+                                                    <div class="col-auto" style="height: 8px;">
+                
+                                                        <fa-icon *ngIf=" data.direction== 'increase' " [icon]="fa_SortUp" style="font-size: 20px;margin-right: 5px; color: red;"></fa-icon>
+                                                        <fa-icon *ngIf=" data.direction== 'decrease' " [icon]="fa_SortDown" style="font-size: 20px;margin-right: 5px; color: green;"></fa-icon>
+                                                        
+                                                        <span style="margin-left: 0px;margin-bottom: 0px;margin-top: 0px;font-size: 20px;height: 0px;padding-top: 0px;padding-bottom: 0px;color:rgb(133,135,150);">{{data.data_percentage}}%</span></div>
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                     </div>
-                                    <div class="col">
-                                        <div class="row">
-                                            <div class="col-lg-6 mb-4">
-                                                <div class="card text-warning border-warning shadow">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="m-0">Primary</p>
-                                                                <p class="text-warning small m-0">#4e73df</p>
-                                                            </div>
-                                                            <div class="col text-right align-self-center"><i class="fa fa-star"></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 mb-4">
-                                                <div class="card text-warning border-warning shadow">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="m-0">Primary</p>
-                                                                <p class="text-warning small m-0">#4e73df</p>
-                                                            </div>
-                                                            <div class="col text-right align-self-center"><i class="fa fa-star"></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="row">
-                                            <div class="col-lg-6 mb-4">
-                                                <div class="card text-danger border-danger shadow">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="m-0">Primary</p>
-                                                                <p class="text-danger small m-0">#4e73df</p>
-                                                            </div>
-                                                            <div class="col text-right align-self-center"><i class="fa fa-star"></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 mb-4">
-                                                <div class="card text-success border-success shadow">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="m-0">Primary</p>
-                                                                <p class="text-success small m-0">#4e73df</p>
-                                                            </div>
-                                                            <div class="col text-right align-self-center"><i class="fa fa-star"></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="row">
-                                            <div class="col-lg-6 mb-4">
-                                                <div class="card text-warning border-warning shadow">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="m-0">Primary</p>
-                                                                <p class="text-warning small m-0">#4e73df</p>
-                                                            </div>
-                                                            <div class="col text-right align-self-center"><i class="fa fa-star"></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 mb-4">
-                                                <div class="card text-warning border-warning shadow">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <p class="m-0">Primary</p>
-                                                                <p class="text-warning small m-0">#4e73df</p>
-                                                            </div>
-                                                            <div class="col text-right align-self-center"><i class="fa fa-star"></i></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row" style="padding-bottom: 15px;">
-                                    <div class="col">
-                                        <div class="dropdown"><button class="btn btn-light btn-sm dropdown-toggle border rounded border-light" data-toggle="dropdown" aria-expanded="false" type="button">Dropdown </button>
-                                            <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="#">First Item</a><a class="dropdown-item" role="presentation" href="#">Second Item</a><a class="dropdown-item" role="presentation" href="#">Third Item</a></div>
-                                        </div>
-                                    </div>
-                                    <div class="col text-right">
-                                        <div class="dropdown border rounded border-light"><button class="btn btn-light btn-sm dropdown-toggle border rounded border-light" data-toggle="dropdown" aria-expanded="false" type="button">Dropdown </button>
-                                            <div class="dropdown-menu" role="menu"><a class="dropdown-item" role="presentation" href="#">First Item</a><a class="dropdown-item" role="presentation" href="#">Second Item</a><a class="dropdown-item" role="presentation" href="#">Third Item</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <iframe  id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://plotly.com/~corona_dashboard/43.embed?showlink=false&modebar=false&autosize=true" height="350" width="100%"></iframe>
                                 
+                                <div class="row" style="padding-bottom: 15px;" *ngIf="this.showCountryPlot == true">
+                                    <div class="col">
+                                        <select  [(ngModel)]="this.countryTracePlotDropdownSelected" (change)="this.updateCountryPlot(this.countryName, this.countryTracePlotDropdownSelected,this.countryPlotTimeline)"  style=" padding:5px; font-size:15px; background: #f8f9fc; border:0px; outline:0px;">
+                                            <option *ngFor="let kind of this.countryTracePlotDropdown" [ngValue]="kind"> {{kind.name}} </option>
+                                        </select>
+                                    </div>
                                 </div>
+                                
+                                    <div *ngIf="this.showCountryPlot == false" class="row" style="height: 300px;">
+                                        <div class="col text-center align-self-center">
+                                            <h1>Loading Visuals...</h1>
+                                        </div>
+                                    </div>
+    
+                                    <iframe  *ngIf="this.showCountryPlot == true" id="igraph" scrolling="no" style="border:none;" seamless="seamless" [src]="this.countryPlotLink" height="350" width="100%"></iframe>
+                                    
+                                    <div *ngIf="this.showCountryPlot == true" class="row" style="margin-top: 10px;">
+                                        <div class="col text-center" *ngFor="let button of this.countryPlotTimeline"> 
+                                            <div class="col text-center">
+                                                <button  [ngClass]="button.selected ? 'btn btn-light text-info border rounded border-white' : 'btn text-muted border rounded border-white' " type="button" (click)="updateCountryPlotTimeline(this.countryName,button.id, this.countryPlotTimeline,this.countryTracePlotDropdownSelected)" >{{button.name}}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+
+
                             </div>
                         </div>
                     </div>

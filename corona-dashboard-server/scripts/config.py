@@ -20,3 +20,6 @@ DATA_URLS = {
                 'world_data' : "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/ecdc/full_data.csv",
                 'cali_testing' : "https://data.ca.gov/dataset/efd6b822-7312-477c-922b-bccb82025fbe/resource/b6648a0d-ff0a-4111-b80b-febda2ac9e09/download/statewide_testing.csv"
             }
+
+PLOTLY_USERNAME =  'rohithravin'
+PLOTLY_API_KEY =  'o4x1xVbQ54P09SaiQHu8'
