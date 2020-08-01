@@ -54,8 +54,8 @@ export class ForecastDashboardComponent implements OnInit {
     this.countryThresholdDate = '';
 
     this.selectedCountry = 'United States';
-    this.showCaliTab = true;
-    this.showWorldTab = false;
+    this.showCaliTab = false;
+    this.showWorldTab = true;
     this.showWorldForecast = false;
 
     this.switchWorldPlot= this.forcastButtonToggle[0];
@@ -64,6 +64,8 @@ export class ForecastDashboardComponent implements OnInit {
     this.switchCountryPlot = this.forcastButtonToggle[0];
     this.switchWorldPlotDisplay = this.fa_WindowMaximize;
 
+    this.getWorldTabForecastPlots(this.switchWorldPlot,'World',1);
+    this.getWorldTabForecastPlots(this.switchWorldPlot,this.selectedCountry,0);
    }
 
   ngOnInit(): void {

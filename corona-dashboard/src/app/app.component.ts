@@ -29,12 +29,12 @@ export class AppComponent {
     // this.forecastButtonFlag = false;
     // this.landingPageFlag = true;
 
-    this.accessTabsFlag = true;
+    this.accessTabsFlag = false;
 
     this.caliDashboardFlag = false;
     this.worldDashboardFlag = false;
-    this.forecastButtonFlag = true;
-    this.landingPageFlag = false;
+    this.forecastButtonFlag = false;
+    this.landingPageFlag = true;
 
 
 
