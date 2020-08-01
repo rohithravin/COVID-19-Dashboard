@@ -22,12 +22,21 @@ export class AppComponent {
   worldButtonSelected: string;
   
   constructor(private _apiService: CoronaDashboardApiService, private _snackBar: MatSnackBar) {
-    this.accessTabsFlag = false;
+    // this.accessTabsFlag = false;
+
+    // this.caliDashboardFlag = false;
+    // this.worldDashboardFlag = false;
+    // this.forecastButtonFlag = false;
+    // this.landingPageFlag = true;
+
+    this.accessTabsFlag = true;
 
     this.caliDashboardFlag = false;
     this.worldDashboardFlag = false;
-    this.forecastButtonFlag = false;
-    this.landingPageFlag = true;
+    this.forecastButtonFlag = true;
+    this.landingPageFlag = false;
+
+
 
     this.caliButtonSelected = 'btn-primary';
     this.worldButtonSelected = 'btn-primary';

@@ -67,6 +67,17 @@ export class CoronaDashboardApiService {
     return this._httpClient.post('http://localhost:3000/world/getWorldPlot', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
   }
 
+  getCountryForecastPlots(data){
+    const payload  = JSON.stringify(data);
+    return this._httpClient.post('http://localhost:3000/forecast/getWorldForecast', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
+  }
+
+  verifyCountry(data){
+    const payload  = JSON.stringify(data);
+    return this._httpClient.post('http://localhost:3000/forecast/verifyCountry', { data: payload }, this.httpOptions).pipe( catchError(this.handleError));
+  }
+
+
   handleError(error: HttpErrorResponse){
     var temp = ['SERVE ERROR: Server not responding. Try again later.'];
     return temp;

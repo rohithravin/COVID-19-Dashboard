@@ -4,6 +4,7 @@ const {spawn} = require('child_process');
 const userLocationRouter = require('./routes/user-location-route')
 const caliDashboard = require('./routes/cali-dashboard-route')
 const worldDashboard = require('./routes/world-dashboard-route')
+const forecastDashboard = require('./routes/forecast-dashboard-route')
 const app = express();
 
 // parse requests of content-type: application/json
@@ -20,18 +21,19 @@ app.use(function (req, res, next) {
 app.use(userLocationRouter);
 app.use('/cali',caliDashboard);
 app.use('/world',worldDashboard);
+app.use('/forecast',forecastDashboard);
 
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to COVID-19 Dashboard Server." });
 });
 
-runLoadDataScript();
+// runLoadDataScript();
 
 function runLoadDataScript(){
   console.log(`load-data.py [INFO]: Start.`);
   const subprocess =  spawn('python', ["-u", './scripts/load-data.py']);
-  
+
   // print output of script
   subprocess.stdout.on('data', (data) => {
     console.log(`load-data.py [INFO]:${data}`);
